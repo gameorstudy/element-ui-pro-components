@@ -41,6 +41,9 @@ import {
   
   // 反馈组件
   Tooltip,
+
+  // 弹框组件
+  Dialog,
 } from 'element-ui'
 
 // 注册指令
@@ -74,3 +77,4 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
 Vue.use(Tooltip)
+Vue.use(Dialog)

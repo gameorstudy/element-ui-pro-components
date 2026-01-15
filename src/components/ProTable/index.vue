@@ -95,7 +95,7 @@
 </template>
 
 <script>
-  import ProFormItem from '../ProForm/children/ProFormItem'
+  import ProFormItem from '../ProFormItem'
   import ArrowIcon from './components/ArrowIcon.vue'
   import CustomRender from './components/render.vue'
   import { setPlaceholder, setSelectOptions, setCascaderOptions } from '../../utils/form'
@@ -114,6 +114,11 @@
       search: {
         type: [Boolean, Object],
         default: true
+      },
+      // 表单默认值
+      initialValues: {
+        type: Object,
+        default: () => { }
       },
       // 列设置
       columnSettings: { // todo
@@ -442,7 +447,7 @@
           return {}
         }
 
-        return columns
+        const data = columns
           // 筛选表单类型
           .filter(column => column.valueType)
           .reduce((accu, cur) => {
@@ -453,6 +458,8 @@
               [key]: initialValue
             }
           }, {})
+
+          return { ...this.initialValues, ...data }
       },
       /**s
        * @desc 表单请求参数（分页）

@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import ProFormItem from './children/ProFormItem'
+import ProFormItem from '../ProFormItem'
 import { setPlaceholder, setSelectOptions, setCascaderOptions } from '../../utils/form'
 
 export default {
@@ -212,14 +212,16 @@ export default {
         return {}
       }
 
-      return formItems.reduce((accu, cur) => {
+      const data = formItems.reduce((accu, cur) => {
         const { prop, initialValue } = cur
 
         return {
           ...accu,
-          [prop]: initialValue ?? this.initialValues?.[prop]
+          [prop]: initialValue
         }
-      })
+      }, {})
+
+      return { ...this.initialValues, ...data }
     },    
     /**
      * @desc 获取 el-form ref
