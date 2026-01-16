@@ -1,0 +1,114 @@
+<template>
+  <el-popover popper-class="column-setting-popover" placement="bottom-end" trigger="click">
+    <div class="toolbar-item" slot="reference">
+      <el-tooltip content="列设置" placement="top">
+        <SettingIcon />
+      </el-tooltip>
+    </div>
+    <div class="popover-title">
+      <div class="column-setting-title">
+        <el-checkbox v-model="checkedAll">列展示</el-checkbox>
+        <el-button type="text">重置</el-button>
+      </div>
+    </div>
+    <div class="popover-content">
+      <div class="column-setting-list-group">
+        <!-- 固定在列首 -->
+        <!-- start -->
+        <ColumnSettingsItem :columns="leftFixedColumns" />
+        <!-- end -->
+        <!-- 不固定 -->
+        <!-- start -->
+        <ColumnSettingsItem :columns="noFixedColumns" />
+        <!-- end -->
+        <!-- 固定在列尾 -->
+        <!-- start -->
+        <ColumnSettingsItem :columns="rightFixedColumns" />
+        <!-- end -->
+      </div>
+    </div>
+  </el-popover>
+</template>
+
+<script>
+  import SettingIcon from './svg/SettingIcon.vue';
+  import ColumnSettingsItem from './ColumnSettingsItem.vue';
+
+  export default {
+    name: 'ColumnSettings',
+    components: {
+      SettingIcon,
+      ColumnSettingsItem
+    },
+    props: {
+      // 列设置
+      columnSettings: { // todo
+        type: [Boolean, Object],
+        default: true
+      },
+      // 列项
+      columns: {
+        type: Array,
+        required: true
+      }
+    },
+    computed: {
+      // 固定在左侧列
+      leftFixedColumns() {
+        return this.columns.filter(item => item.fixed === 'left')
+      },
+      // 不固定列
+      noFixedColumns() {
+        return this.columns.filter(item => item.fixed !== 'left' && item.fixed !== 'right')
+      },
+      // 固定在右侧列
+      rightFixedColumns() {
+        return this.columns.filter(item => item.fixed === 'right')
+      }
+    },
+    data() {
+      return {
+        checkedAll: true, // 列展示勾选
+      }
+    },
+  }
+</script>
+
+<style scoped>
+.toolbar-item {
+  display: flex;
+  margin-block: 0;
+  margin-inline: 4px;
+  color: rgba(42, 46, 54, 0.88);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.toolbar-item:hover {
+  color: #409EFF;
+}
+</style>
+
+<style>
+.column-setting-popover .popover-title {
+  margin-bottom: 8px;
+  color: rgba(42, 46, 54, 0.88);
+  font-weight: 600;
+  border-bottom: none;
+  padding: 0;
+}
+
+.column-setting-popover .popover-title .column-setting-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+}
+
+.column-setting-popover .popover-content {
+  width: 200px;
+  padding-block: 0;
+  padding-inline: 0;
+  padding-block-end: 8px;
+}
+</style>

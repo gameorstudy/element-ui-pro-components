@@ -41,6 +41,7 @@ import {
   
   // 反馈组件
   Tooltip,
+  Popover,
 
   // 弹框组件
   Dialog,
@@ -77,4 +78,5 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Pagination)
 Vue.use(Tooltip)
+Vue.use(Popover)
 Vue.use(Dialog)

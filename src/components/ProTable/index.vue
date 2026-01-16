@@ -45,7 +45,15 @@
     <!-- end -->
     <!-- slot -->
     <!-- start -->
-    <slot></slot>
+    <div class="pro-table-toolbar">
+      <slot></slot>
+      <div class="toolbar-items">
+        <!-- 列设置 -->
+        <!-- start -->
+        <ColumnSettings :columnSettings="columnSettings" :columns="columnsForSetting" />
+        <!-- end -->
+      </div>
+    </div>
     <!-- end -->
     <el-table
       class="pro-table"
@@ -96,18 +104,20 @@
 
 <script>
   import ProFormItem from '../ProFormItem'
-  import ArrowIcon from './components/ArrowIcon.vue'
-  import CustomRender from './components/render.vue'
+  import ArrowIcon from './components/svg/ArrowIcon.vue'
+  import CustomRender from './components/CustomRender.vue'
   import { setPlaceholder, setSelectOptions, setCascaderOptions } from '../../utils/form'
   import { defaultColConfig, BREAKPOINT_ORDER, GRID_COLUMNS, calculateCurrentSpan } from '../../utils/breakpoints'
   import { debounce } from '@/utils/debounce';
+  import ColumnSettings from './components/ColumnSettings.vue'
   
   export default {
     name: 'ProTable',
     components: {
       ProFormItem,
       ArrowIcon,
-      CustomRender
+      CustomRender,
+      ColumnSettings
     },
     props: {
       // 搜索表单
@@ -121,7 +131,7 @@
         default: () => { }
       },
       // 列设置
-      columnSettings: { // todo
+      columnSettings: {
         type: [Boolean, Object],
         default: true
       },
@@ -181,6 +191,16 @@
       manualRequest: {
         type: Boolean,
         default: false
+      }
+    },
+    provide() {
+      if (!this.columnSettings) {
+        return {}
+      }
+      
+      return {
+        // 监听列设置修改
+        onColumnSettingsChange: this.onColumnSettingsChange
       }
     },
     computed: {
@@ -269,6 +289,21 @@
               return { ...keys }
           })
       },
+      // 列设置的 columns
+      columnsForSetting() {
+        if (!this.columnSettings) {
+          return []
+        }
+
+        const { columns } = this
+        return columns
+          // 过滤不展示的 && 允许取消勾选但没有设置 prop 的
+          .filter(col => !col.hideInTable && !(!col.disabled && !col.prop))
+          .map((col, index) => {
+            const { label, prop, disabled, fixed, checked = true } = col
+            return { label, prop, disabled, fixed, checked, position: index + 1 }
+          })
+      },
       // 初始化 table events
       initializedTableEvents() {
         const { tableEvents } = this
@@ -302,6 +337,7 @@
         tableData: this.defaultData, // 表格数据
         pageNum: 1, // 页码
         pageSize: this.paginationProps['page-size'] || 10, // 页数
+        filteredColumns: [], // 过滤的列设置配置
       }
     },
     watch: {
@@ -528,7 +564,30 @@
         this.pageNum = 1
 
         this.$emit('onParams', this.getParams())
-      }
+      },
+      /**
+       * @desc 监听列设置修改
+       * @param { Object } data 数据
+       * @param {String} data.event 事件类型
+       */
+      onColumnSettingsChange(data) {
+        const { event, checked, prop } = data
+        const { filteredColumns } = this
+        // 勾选或取消勾选
+        if (event === 'checked') {
+          if (checked) {
+            // 勾选则删除
+            const index = filteredColumns.findIndex(col => col.prop === prop)
+            if (index !== -1) {
+              this.filteredColumns.splice(index, 1, { ...filteredColumns[index], checked })
+            }
+          } else {
+            // 取消勾选则添加
+            this.filteredColumns.push({ checked, prop })
+          }
+        }
+      },
+      
     },
     beforeDestroy () {
       // 清除 resize
@@ -559,6 +618,20 @@
   display: inline-flex;
   align-items: center;
   cursor: pointer;
+}
+
+.pro-table-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 16px;
+}
+
+.toolbar-items {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
 }
 
 .pro-table {

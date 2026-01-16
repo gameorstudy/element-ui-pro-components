@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <DialogFormDemo1 />
+    <ProTableDemo1 />
   </div>
 </template>
 
 <script>
-import DialogFormDemo1 from './views/DialogForm/DialogFormDemo1'
+import ProTableDemo1 from './views/ProTable/ProTableDemo1'
 
 export default {
   name: 'App',
   components: {
-    DialogFormDemo1
+    ProTableDemo1
   }
 }
 </script>

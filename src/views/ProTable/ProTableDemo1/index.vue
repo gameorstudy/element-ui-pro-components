@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 24px;">
     <ProTable 
       :defaultData="defaultData"
       :dataSource="dataSource"
@@ -38,6 +38,7 @@
       columns() {
         return [
           {
+            'min-width': 180,
             label: '标题',
             prop: 'title',
             valueType: 'input'
@@ -46,6 +47,7 @@
             label: '状态',
             prop: 'state',
             labelSlot: true,
+            disabled: true,
             valueType: 'select',
             options: [
               { label: '未解决', value: 'open' },
@@ -67,6 +69,7 @@
             )
           },
           {
+            'min-width': 160,
             label: '金额',
             prop: 'money',
             valueType: 'input',
@@ -75,12 +78,14 @@
             )
           },
           {
+            'min-width': 240,
             label: '代码',
             prop: 'code',
             valueType: 'input',
             hideInSearch: this.hide
           },
           {
+            width: 140,
             label: '创建时间',
             prop: 'createDate',
             valueType: 'date-picker',
@@ -93,6 +98,7 @@
           {
             label: '操作',
             fixed: 'right',
+            disabled: true,
             width: 120,
             render: (scope) => (
               <span>
