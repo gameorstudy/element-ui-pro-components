@@ -147,13 +147,14 @@ paginationConfig = {
 | valueEnum | 值的枚举，会自动转化把值当成 `key` 来取出要显示的内容；`valueType: "select"`时，会转化成下拉选项 | { "todo": "待办", "done": "已完成" } | - |
 | optionLoader | 返回表单组件的下拉数据，如 `select` `cascader`，返回值需要转化成组件支持的格式 | `() => Promise.resolve([{ label: '标签', value: '值'}])` | - |
 | order | 查询表单中的权重，权重大排序在前 | `number` | - |
+| key | 对于没有 `prop` 的 `column` 必须提供一个 `key` 用于渲染。同时也是作为列设置勾选或取消勾选的标识。| `String` | - |
 | labelSlot | 标签文本的内容，同 [Form-Item Slot label](https://element.eleme.io/2.15/#/zh-CN/component/form#form-item-slot)，name 取表单配置项或表格的 `[prop]-label` 值 | `boolean` | - |
 | hideInSearch | 在查询表单中不展示此项, `valueType` 存在时不设置 `true` 时默认展示在搜索表单中 | `boolean` | - |
 | hideInTable | 在 el-table 中不展示此项 | `boolean` | - |
 | initialValue | 表单初始值，优先级高于 initialValues，<font color="#f56c6c">不建议一个 prop 同时设置 initialValue 和 initialValues</font> | `any` | - |
 | disabled | 列设置中 `disabled` 的状态 | `boolean` \| `{ checkbox: boolean; }` | - |
-| render | 类似自定义 table-column 的 `slot`。 | `(scope) => jsxElement` | - |
-| renderCustomHeader | 因为 el-table 默认的 render-header 属性写法在控制台会打印警告，提示使用 `slot`，所以重写。| `(scope) => jsxElement` | - |
+| renderCell | 类似自定义 table-column 的 `slot`。 | `(scope) => jsxElement` | - |
+| renderCellHeader | 因为 el-table 默认的 render-header 属性写法在控制台会打印警告，提示使用 `slot`，所以重写。| `(scope) => jsxElement` | - |
 > 当使用 Radio 单选框和 Checkbox 多选框时，type 分别传 radio-group 和 checkbox-group，options 传 [{ label: '标签', value: '值' }] 生成选项。
 当 select 要使用分组时，只需要传递正确的[数据结构](https://element.eleme.io/2.15/#/zh-CN/component/select#fen-zu)即可，判断依据是列表第一条数据包含 options 数组。
 ##### el-form-item slot

@@ -7,7 +7,7 @@
     </div>
     <div class="popover-title">
       <div class="column-setting-title">
-        <el-checkbox v-model="checkedAll">列展示</el-checkbox>
+        <el-checkbox :value="checkedAll" :indeterminate="isIndeterminate" @change="handleChange">列展示</el-checkbox>
         <el-button type="text">重置</el-button>
       </div>
     </div>
@@ -31,47 +31,84 @@
 </template>
 
 <script>
-  import SettingIcon from './svg/SettingIcon.vue';
-  import ColumnSettingsItem from './ColumnSettingsItem.vue';
+import SettingIcon from './svg/SettingIcon.vue';
+import ColumnSettingsItem from './ColumnSettingsItem.vue';
 
-  export default {
-    name: 'ColumnSettings',
-    components: {
-      SettingIcon,
-      ColumnSettingsItem
+export default {
+  name: 'ColumnSettings',
+  inject: ['onColumnSettingsChange'],
+  components: {
+    SettingIcon,
+    ColumnSettingsItem
+  },
+  props: {
+    // 列设置
+    columnSettings: { // todo
+      type: [Boolean, Object],
+      default: true
     },
-    props: {
-      // 列设置
-      columnSettings: { // todo
-        type: [Boolean, Object],
-        default: true
-      },
-      // 列项
-      columns: {
-        type: Array,
-        required: true
-      }
+    // 列项
+    columns: {
+      type: Array,
+      required: true
     },
-    computed: {
-      // 固定在左侧列
-      leftFixedColumns() {
-        return this.columns.filter(item => item.fixed === 'left')
-      },
-      // 不固定列
-      noFixedColumns() {
-        return this.columns.filter(item => item.fixed !== 'left' && item.fixed !== 'right')
-      },
-      // 固定在右侧列
-      rightFixedColumns() {
-        return this.columns.filter(item => item.fixed === 'right')
-      }
+    // 规则
+    rules: {
+      type: Array,
+      required: true
+    }
+  },
+  computed: {
+    // 初始化 columns
+    initialedColumns() {
+      const { columns, rules } = this
+
+      return rules.map(rule => {
+        const index = columns.findIndex(item => (item.prop || item.key) === rule.prop)
+        if (index !== -1) {
+          const { label, disabled, fixed } = columns[index]
+          return { ...rule, label, disabled, fixed }
+        }
+
+        return
+      }).filter(Boolean)
     },
-    data() {
-      return {
-        checkedAll: true, // 列展示勾选
-      }
+    // 固定在左侧列
+    leftFixedColumns() {
+      return this.initialedColumns.filter(item => item.fixed === 'left')
     },
-  }
+    // 不固定列
+    noFixedColumns() {
+      return this.initialedColumns.filter(item => item.fixed !== 'left' && item.fixed !== 'right')
+    },
+    // 固定在右侧列
+    rightFixedColumns() {
+      return this.initialedColumns.filter(item => item.fixed === 'right')
+    },
+    // 列展示勾选状态
+    checkedAll() {
+      return this.initialedColumns.length === this.initialedColumns.filter(item => item.checked).length
+    },
+    // 表示 checkbox 的不确定状态
+    isIndeterminate() {
+      return !this.checkedAll && this.initialedColumns.filter(item => !item.disabled && item.checked).length > 0
+    },
+  },
+  data() {
+    return {
+    }
+  },
+  methods: {
+    /**
+     * @desc 监听修改
+     * @param {Boolean} checked 状态
+     */
+    handleChange(checked) {
+      // ProTable provide 提供
+      this.onColumnSettingsChange({ event: 'checkAll', checked })
+    }
+  },
+}
 </script>
 
 <style scoped>
@@ -86,6 +123,10 @@
 
 .toolbar-item:hover {
   color: #409EFF;
+}
+
+.toolbar-item svg {
+  outline: none;
 }
 </style>
 

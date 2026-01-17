@@ -1,14 +1,18 @@
 <template>
   <div v-if="columns.length" class="column-setting-list">
     <div class="column-setting-list-title">{{ title }}</div>
-    <div class="site-tree-list" :class="{ 'site-tree-list-draggable': canDraggable }" :draggable="canDraggable" v-for="column in columns" :key="column.prop">
+    <div class="site-tree-list" :class="{ 'site-tree-list-draggable': canDraggable }" :draggable="canDraggable"
+      v-for="column in columns" :key="column.prop">
       <span class="site-tree-draggable-icon">
         <span class="icon icon-holder">
           <HolderIcon />
         </span>
       </span>
       <span class="site-tree-switcher"></span>
-      <el-checkbox :value="column.checked" @change="(checked) => handleChange(checked, column.prop)" :disabled="column.disabled">
+      <el-checkbox 
+        :value="column.checked"
+        @change="(checked) => handleChange(checked, column.prop)"
+        :disabled="column.disabled">
         <span class="tree-node-content-wrapper">{{ column.label }}</span>
         <span class="icon-group">
           <template v-if="column.fixed !== 'left'">
@@ -39,55 +43,55 @@
 </template>
 
 <script>
-  import HolderIcon from './svg/HolderIcon.vue';
-  import VerticalAlignTopIcon from './svg/VerticalAlignTopIcon.vue';
-  import VerticalAlginBottomIcon from './svg/VerticalAlginBottomIcon.vue';
-  import VerticalAlginMiddleIcon from './svg/VerticalAlginMiddleIcon.vue';
+import HolderIcon from './svg/HolderIcon.vue';
+import VerticalAlignTopIcon from './svg/VerticalAlignTopIcon.vue';
+import VerticalAlginBottomIcon from './svg/VerticalAlginBottomIcon.vue';
+import VerticalAlginMiddleIcon from './svg/VerticalAlginMiddleIcon.vue';
 
-  export default {
-    name: 'ColumnSettingsItem',
-    inject: ['onColumnSettingsChange'],
-    components: {
-      HolderIcon,
-      VerticalAlignTopIcon,
-      VerticalAlginMiddleIcon,
-      VerticalAlginBottomIcon,
-    },
-    props: {
-      // 列数据
-      columns: {
-        type: Array,
-        default: () => []
+export default {
+  name: 'ColumnSettingsItem',
+  inject: ['onColumnSettingsChange'],
+  components: {
+    HolderIcon,
+    VerticalAlignTopIcon,
+    VerticalAlginMiddleIcon,
+    VerticalAlginBottomIcon,
+  },
+  props: {
+    // 列数据
+    columns: {
+      type: Array,
+      default: () => []
+    }
+  },
+  computed: {
+    // 列类型
+    title() {
+      const { columns } = this
+      if (Array.isArray(columns) && columns.length) {
+        const fixed = columns[0].fixed
+        return fixed === 'left' ? '固定在左侧' : fixed === 'right' ? '固定在右侧' : '不固定'
       }
-    },
-    computed: {
-      // 列类型
-      title() {
-        const { columns } = this
-        if (Array.isArray(columns) && columns.length) {
-          const fixed = columns[0].fixed
-          return fixed === 'left' ? '固定在左侧' : fixed === 'right' ? '固定在右侧' : '不固定'
-        }
 
-        return ''
-      },
-      // 数组长度 > 1 可拖动
-      canDraggable() {
-        return this.columns?.length
-      }
+      return ''
     },
-    methods: {
-      /**
-       * @desc 监听修改
-       * @param {Boolean} checked 状态
-       * @param {String} prop 属性
-       */
-      handleChange(checked, prop) {
-        // ProTable provide 提供
-        this.onColumnSettingsChange({ event: 'checked', checked, prop })
-      }
-    },
-  }
+    // 数组长度 > 1 可拖动
+    canDraggable() {
+      return this.columns?.length > 1
+    }
+  },
+  methods: {
+    /**
+     * @desc 监听修改
+     * @param {Boolean} checked 状态
+     * @param {String} prop 属性
+     */
+    handleChange(checked, prop) {
+      // ProTable provide 提供
+      this.onColumnSettingsChange({ event: 'check', checked, prop })
+    }
+  },
+}
 </script>
 
 <style>
@@ -97,7 +101,7 @@
   padding-inline-start: 24px;
   color: rgba(42, 46, 54, 0.65);
   font-size: 12px;
-}   
+}
 
 .column-setting-popover .site-tree-list {
   display: flex;
@@ -185,6 +189,10 @@
 
 .column-setting-popover .site-tree-list:hover .icon-vertical-align {
   display: inline-flex;
+}
+
+.column-setting-popover .site-tree-list:hover .icon-vertical-align svg {
+  outline: none;
 }
 
 .column-setting-popover .tree-node-content-wrapper {
