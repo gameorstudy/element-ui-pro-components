@@ -1,84 +1,81 @@
 <template>
   <div v-if="columns.length" class="column-setting-list">
     <div class="column-setting-list-title">{{ title }}</div>
-    <div class="site-tree-list" :class="{ 'site-tree-list-draggable': canDraggable }" :draggable="canDraggable"
-      v-for="column in columns" :key="column.prop">
+    <div
+      class="site-tree-list"
+      :class="{ 'site-tree-list-draggable': canDraggable }"
+      :draggable="canDraggable"
+      v-for="column in columns"
+      :key="column.prop"
+    >
       <span class="site-tree-draggable-icon">
         <span class="icon icon-holder">
           <HolderIcon />
         </span>
       </span>
       <span class="site-tree-switcher"></span>
-      <el-checkbox 
-        :value="column.checked"
-        @change="(checked) => handleChange(checked, column.prop)"
-        :disabled="column.disabled">
-        <span class="tree-node-content-wrapper">{{ column.label }}</span>
-        <span class="icon-group">
-          <template v-if="column.fixed !== 'left'">
-            <span class="icon icon-vertical-align">
-              <el-tooltip content="固定在列首" placement="top">
-                <VerticalAlignTopIcon />
-              </el-tooltip>
-            </span>
-          </template>
-          <template v-if="column.fixed === 'left' || column.fixed === 'right'">
-            <span class="icon icon-vertical-align">
-              <el-tooltip content="不固定" placement="top">
-                <VerticalAlginMiddleIcon />
-              </el-tooltip>
-            </span>
-          </template>
-          <template v-if="column.fixed !== 'right'">
-            <span class="icon icon-vertical-align">
-              <el-tooltip content="固定在列尾" placement="top">
-                <VerticalAlginBottomIcon />
-              </el-tooltip>
-            </span>
-          </template>
+      <template v-if="columnSettings.checkable">
+        <el-checkbox
+          :value="column.checked"
+          @change="(checked) => handleChange(checked, column.prop)"
+          :disabled="column.disabled"
+        >
+          <span class="tree-node-content-wrapper">{{ column.label }}</span>
+          <ColumnAlignSettings :column="column" />
+        </el-checkbox>
+      </template>
+      <template v-else>
+        <span class="tree-node-algin-wrapper">
+          <span class="tree-node-content-wrapper">{{ column.label }}</span>
+          <ColumnAlignSettings :column="column" />
         </span>
-      </el-checkbox>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import HolderIcon from './svg/HolderIcon.vue';
-import VerticalAlignTopIcon from './svg/VerticalAlignTopIcon.vue';
-import VerticalAlginBottomIcon from './svg/VerticalAlginBottomIcon.vue';
-import VerticalAlginMiddleIcon from './svg/VerticalAlginMiddleIcon.vue';
+import HolderIcon from "./svg/HolderIcon.vue";
+import ColumnAlignSettings from "./ColumnAlignSettings.vue";
 
 export default {
-  name: 'ColumnSettingsItem',
-  inject: ['onColumnSettingsChange'],
+  name: "ColumnSettingsItem",
+  inject: ["onColumnSettingsChange"],
   components: {
     HolderIcon,
-    VerticalAlignTopIcon,
-    VerticalAlginMiddleIcon,
-    VerticalAlginBottomIcon,
+    ColumnAlignSettings,
   },
   props: {
     // 列数据
     columns: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
+    // 列设置
+    columnSettings: {
+      type: [Boolean, Object],
+      default: true,
+    },
   },
   computed: {
     // 列类型
     title() {
-      const { columns } = this
+      const { columns } = this;
       if (Array.isArray(columns) && columns.length) {
-        const fixed = columns[0].fixed
-        return fixed === 'left' ? '固定在左侧' : fixed === 'right' ? '固定在右侧' : '不固定'
+        const fixed = columns[0].fixed;
+        return fixed === "left"
+          ? "固定在左侧"
+          : fixed === "right"
+          ? "固定在右侧"
+          : "不固定";
       }
 
-      return ''
+      return "";
     },
     // 数组长度 > 1 可拖动
     canDraggable() {
-      return this.columns?.length > 1
-    }
+      return this.columns?.length > 1;
+    },
   },
   methods: {
     /**
@@ -88,10 +85,10 @@ export default {
      */
     handleChange(checked, prop) {
       // ProTable provide 提供
-      this.onColumnSettingsChange({ event: 'check', checked, prop })
-    }
+      this.onColumnSettingsChange({ event: "check", checked, prop });
+    },
   },
-}
+};
 </script>
 
 <style>
@@ -152,26 +149,36 @@ export default {
   border-radius: 6px;
 }
 
+.column-setting-popover .site-tree-list .tree-node-algin-wrapper {
+  width: 100%;
+  display: inline-block;
+}
+
 .column-setting-popover .site-tree-list .el-checkbox {
   flex: 1;
 }
 
 .column-setting-popover .site-tree-list .el-checkbox__label {
+  width: calc(100% - 18px);
+}
+
+.column-setting-popover .site-tree-list .el-checkbox__label,
+.column-setting-popover .site-tree-list .tree-node-algin-wrapper {
   line-height: 24px;
   padding-left: 0;
   margin-left: 4px;
   padding: 0 4px;
   border-radius: 6px;
   box-sizing: border-box;
-  width: calc(100% - 18px);
   transition: background-color 0.2s;
 }
 
-.column-setting-popover .site-tree-list .el-checkbox__label:hover {
+.column-setting-popover .site-tree-list .el-checkbox__label:hover,
+.column-setting-popover .site-tree-list .tree-node-algin-wrapper:hover {
   background-color: rgba(42, 46, 54, 0.04);
 }
 
-.column-setting-popover .site-tree-list .el-checkbox__label .icon-group {
+.column-setting-popover .site-tree-list .icon-group {
   float: right;
   height: 24px;
   display: inline-flex;
@@ -179,9 +186,9 @@ export default {
   gap: 8px;
 }
 
-.column-setting-popover .site-tree-list .el-checkbox__label .icon-vertical-align {
+.column-setting-popover .site-tree-list .icon-vertical-align {
   font-size: 14px;
-  color: #1677FF;
+  color: #1677ff;
   cursor: pointer;
   display: none;
   transition: display 0.2s;
