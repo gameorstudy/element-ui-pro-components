@@ -4,14 +4,14 @@
     <div
       class="site-tree-list"
       v-for="(column, index) in columns"
-      :class="{ 
+      :class="{
         'site-tree-list-draggable': draggable,
-        'dragging': draggingItemProp === column.prop,
+        dragging: draggingItemProp === column.prop,
       }"
       :draggable="draggable"
       :key="column.prop"
       @dragstart="(e) => onDragstart(e, column.prop, index)"
-      @dragenter.prevent="e => onDragenter(e, column.prop, index)"
+      @dragenter.prevent="(e) => onDragenter(e, column.prop, index)"
     >
       <span v-if="draggable" class="site-tree-draggable-icon">
         <span class="icon icon-holder">
@@ -27,18 +27,48 @@
         >
           <span class="tree-node-content-wrapper">{{ column.label }}</span>
           <ColumnAlignSettings :column="column" />
+          <!-- 头部插入 -->
+          <!-- start -->
           <Transition name="fade">
-            <div v-if="targetItemProp === column.prop" class="site-tree-drop-indicator"></div>
+            <div
+              v-if="index === 0 && showHeadIndicator"
+              class="site-tree-top-head-indicator"
+            ></div>
           </Transition>
+          <!-- end -->
+          <!-- 尾部插入 -->
+          <!-- start -->
+          <Transition name="fade">
+            <div
+              v-if="targetItemProp === column.prop"
+              class="site-tree-drop-indicator"
+            ></div>
+          </Transition>
+          <!-- end -->
         </el-checkbox>
       </template>
       <template v-else>
         <span class="tree-node-algin-wrapper">
           <span class="tree-node-content-wrapper">{{ column.label }}</span>
           <ColumnAlignSettings :column="column" />
+          <!-- 头部插入 -->
+          <!-- start -->
           <Transition name="fade">
-            <div v-if="targetItemProp === column.prop" class="site-tree-drop-indicator"></div>
+            <div
+              v-if="index === 0 && showHeadIndicator"
+              class="site-tree-top-head-indicator"
+            ></div>
           </Transition>
+          <!-- end -->
+          <!-- 尾部插入 -->
+          <!-- start -->
+          <Transition name="fade">
+            <div
+              v-if="targetItemProp === column.prop"
+              class="site-tree-drop-indicator"
+            ></div>
+          </Transition>
+          <!-- end -->
         </span>
       </template>
     </div>
@@ -64,7 +94,7 @@ export default {
     },
     // 列设置
     columnSettings: {
-      type: Object
+      type: Object,
     },
   },
   computed: {
@@ -89,10 +119,10 @@ export default {
   },
   data() {
     return {
-      draggingItemProp: '', // 当前拖动列的属性
-      targetItemProp: '', // 释放目标列的属性
-      cursorPos: '', // 光标处于释放目标的位置 top | bottom
-    }
+      draggingItemProp: "", // 当前拖动列的属性
+      targetItemProp: "", // 释放目标列的属性
+      showHeadIndicator: false, // 是否在头节点插入
+    };
   },
   methods: {
     /**
@@ -111,10 +141,10 @@ export default {
      * @param {Number} index 下标
      */
     onDragstart(e, prop, index) {
-      e.dataTransfer.effectAllowed = "move"
-      e.dataTransfer.dropEffect = "move"
-      e.dataTransfer.setData('from-index', index)
-      this.draggingItemProp = prop
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.dropEffect = "move";
+      e.dataTransfer.setData("from-index", index);
+      this.draggingItemProp = prop;
     },
     /**
      * @desc 拖动进入到目标区域
@@ -127,20 +157,48 @@ export default {
 
       // 拖动开始的下标
       if (this.draggingItemProp === prop) {
-        this.targetItemProp = ''
-        return
+        this.targetItemProp = null
+        return;
       }
-      this.targetItemProp = prop
-      
+
       // 1. 获取元素的位置和尺寸
       const rect = e.target.getBoundingClientRect();
-      
+
       // 2. 获取鼠标相对于元素的位置
       const relativeY = e.clientY - rect.top;
 
-      // 3. 判断光标在释放目标元素的上半还是下半
-      this.cursorPos = relativeY < rect.height / 2 ? 'top' : 'bottom'
-    }
+      // 3. 判断光标在释放目标位置的上半还是下半
+      const cursorPos = relativeY < rect.height / 2 ? "top" : "bottom";
+
+      // 4. 判断当前拖拽的方向
+      const fromIndex = this.columns.findIndex(item => item.prop === this.draggingItemProp)
+      const dragDirection = fromIndex < toIndex ? "down" : "up";
+      
+      // 5. 光标在释放目标位置上半 则在释放目标位置上方插入
+      //    光标在释放目标位置下半 则在释放目标位置下方插入
+      this.showHeadIndicator = false // 需要在 drop 事件执行
+      if (cursorPos === 'top') {
+        if (toIndex === 0) {
+          // 这里有点特殊 因为如果释放元素是下标为 0 时 需要在最上方显示插入标志
+          this.targetItemProp = null
+          this.showHeadIndicator = true
+        } else {
+          if (dragDirection === 'down' && fromIndex === toIndex - 1) {
+            // 考虑到向下拖动的上一个位置可能是开始拖动的元素
+            this.targetItemProp = null
+          } else {
+            this.targetItemProp = this.columns[toIndex - 1].prop
+          }
+        }
+      } else {
+        if (dragDirection === 'up' && fromIndex === toIndex + 1) {
+          // 考虑到向上拖动的下一个位置可能是开始拖动的元素
+          this.targetItemProp = null
+        } else {
+          this.targetItemProp = prop
+        }
+      }
+    },
   },
 };
 </script>
@@ -176,7 +234,7 @@ export default {
   inset-inline-end: 0;
   bottom: 4px;
   inset-inline-start: 0;
-  border: 1px solid #1677FF;
+  border: 1px solid #1677ff;
   opacity: 0;
   animation-name: show;
   animation-duration: 0.3s;
@@ -291,17 +349,23 @@ export default {
   white-space: nowrap;
 }
 
-.column-setting-popover .site-tree-drop-indicator {
+.column-setting-popover .site-tree-drop-indicator,
+.column-setting-popover .site-tree-top-head-indicator {
   width: calc(100% - 4px);
   height: 2px;
-  background-color: #1677FF;
+  background-color: #1677ff;
   border-radius: 1px;
   pointer-events: none;
   position: absolute;
   z-index: 1;
   bottom: -3px;
-} 
+}
 
+.column-setting-popover .site-tree-top-head-indicator {
+  top: 0;
+}
+
+.column-setting-popover .site-tree-top-head-indicator::before,
 .column-setting-popover .site-tree-drop-indicator::after {
   position: absolute;
   left: 0;
@@ -310,23 +374,27 @@ export default {
   width: 8px;
   height: 8px;
   background-color: transparent;
-  border: 2px solid #1677FF;
+  border: 2px solid #1677ff;
   border-radius: 50%;
   content: "";
   box-sizing: border-box;
 }
 
-.fade-enter-active, 
+.fade-enter-active,
 .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity 0.2s;
 }
-.fade-enter, 
+.fade-enter,
 .fade-leave-to {
   opacity: 0;
 }
 
 @keyframes show {
-  0% { opacity: 0 }
-  100% { opacity: 1 }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
