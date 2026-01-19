@@ -3,12 +3,17 @@
     <div class="column-setting-list-title">{{ title }}</div>
     <div
       class="site-tree-list"
-      :class="{ 'site-tree-list-draggable': canDraggable }"
-      :draggable="canDraggable"
-      v-for="column in columns"
+      v-for="(column, index) in columns"
+      :class="{ 
+        'site-tree-list-draggable': draggable,
+        'dragging': draggingItemProp === column.prop,
+      }"
+      :draggable="draggable"
       :key="column.prop"
+      @dragstart="(e) => onDragstart(e, column.prop, index)"
+      @dragenter.prevent="e => onDragenter(e, column.prop, index)"
     >
-      <span class="site-tree-draggable-icon">
+      <span v-if="draggable" class="site-tree-draggable-icon">
         <span class="icon icon-holder">
           <HolderIcon />
         </span>
@@ -22,12 +27,18 @@
         >
           <span class="tree-node-content-wrapper">{{ column.label }}</span>
           <ColumnAlignSettings :column="column" />
+          <Transition name="fade">
+            <div v-if="targetItemProp === column.prop" class="site-tree-drop-indicator"></div>
+          </Transition>
         </el-checkbox>
       </template>
       <template v-else>
         <span class="tree-node-algin-wrapper">
           <span class="tree-node-content-wrapper">{{ column.label }}</span>
           <ColumnAlignSettings :column="column" />
+          <Transition name="fade">
+            <div v-if="targetItemProp === column.prop" class="site-tree-drop-indicator"></div>
+          </Transition>
         </span>
       </template>
     </div>
@@ -53,8 +64,7 @@ export default {
     },
     // 列设置
     columnSettings: {
-      type: [Boolean, Object],
-      default: true,
+      type: Object
     },
   },
   computed: {
@@ -73,9 +83,16 @@ export default {
       return "";
     },
     // 数组长度 > 1 可拖动
-    canDraggable() {
-      return this.columns?.length > 1;
+    draggable() {
+      return this.columnSettings.draggable && this.columns?.length > 1;
     },
+  },
+  data() {
+    return {
+      draggingItemProp: '', // 当前拖动列的属性
+      targetItemProp: '', // 释放目标列的属性
+      cursorPos: '', // 光标处于释放目标的位置 top | bottom
+    }
   },
   methods: {
     /**
@@ -87,6 +104,43 @@ export default {
       // ProTable provide 提供
       this.onColumnSettingsChange({ event: "check", checked, prop });
     },
+    /**
+     * @desc 开始拖动
+     * @param {Object} e 拖拽元素对象
+     * @param {String} prop 属性
+     * @param {Number} index 下标
+     */
+    onDragstart(e, prop, index) {
+      e.dataTransfer.effectAllowed = "move"
+      e.dataTransfer.dropEffect = "move"
+      e.dataTransfer.setData('from-index', index)
+      this.draggingItemProp = prop
+    },
+    /**
+     * @desc 拖动进入到目标区域
+     * @param {Object} e 拖拽元素对象
+     * @param {String} prop 属性
+     * @param {Number} toIndex 下标
+     */
+    onDragenter(e, prop, toIndex) {
+      // ***参数是在事件绑定时确定的 而不是在事件触发时***
+
+      // 拖动开始的下标
+      if (this.draggingItemProp === prop) {
+        this.targetItemProp = ''
+        return
+      }
+      this.targetItemProp = prop
+      
+      // 1. 获取元素的位置和尺寸
+      const rect = e.target.getBoundingClientRect();
+      
+      // 2. 获取鼠标相对于元素的位置
+      const relativeY = e.clientY - rect.top;
+
+      // 3. 判断光标在释放目标元素的上半还是下半
+      this.cursorPos = relativeY < rect.height / 2 ? 'top' : 'bottom'
+    }
   },
 };
 </script>
@@ -110,6 +164,31 @@ export default {
 
 .column-setting-popover .site-tree-list-draggable {
   cursor: grab;
+}
+
+.column-setting-popover .dragging {
+  position: relative;
+}
+
+.column-setting-popover .dragging::after {
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  bottom: 4px;
+  inset-inline-start: 0;
+  border: 1px solid #1677FF;
+  opacity: 0;
+  animation-name: show;
+  animation-duration: 0.3s;
+  animation-play-state: running;
+  animation-fill-mode: forwards;
+  content: "";
+  pointer-events: none;
+}
+
+.column-setting-popover .dragging .el-checkbox__label,
+.column-setting-popover .dragging .tree-node-algin-wrapper {
+  background: #e3f0ff;
 }
 
 .column-setting-popover .site-tree-draggable-icon {
@@ -171,6 +250,7 @@ export default {
   border-radius: 6px;
   box-sizing: border-box;
   transition: background-color 0.2s;
+  position: relative;
 }
 
 .column-setting-popover .site-tree-list .el-checkbox__label:hover,
@@ -209,5 +289,44 @@ export default {
   overflow: hidden;
   word-break: break-all;
   white-space: nowrap;
+}
+
+.column-setting-popover .site-tree-drop-indicator {
+  width: calc(100% - 4px);
+  height: 2px;
+  background-color: #1677FF;
+  border-radius: 1px;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+  bottom: -3px;
+} 
+
+.column-setting-popover .site-tree-drop-indicator::after {
+  position: absolute;
+  left: 0;
+  top: -3px;
+  inset-inline-start: -6px;
+  width: 8px;
+  height: 8px;
+  background-color: transparent;
+  border: 2px solid #1677FF;
+  border-radius: 50%;
+  content: "";
+  box-sizing: border-box;
+}
+
+.fade-enter-active, 
+.fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, 
+.fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes show {
+  0% { opacity: 0 }
+  100% { opacity: 1 }
 }
 </style>

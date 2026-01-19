@@ -1,5 +1,5 @@
 <template>
-  <el-popover
+   <el-popover
     popper-class="column-setting-popover"
     placement="bottom-end"
     trigger="click"
@@ -66,8 +66,7 @@ export default {
   props: {
     // 列设置
     columnSettings: {
-      type: [Boolean, Object],
-      default: true,
+      type: Object
     },
     // 列项
     columns: {
@@ -168,16 +167,6 @@ export default {
 
 .toolbar-item svg {
   outline: none;
-}
-</style>
-
-<style>
-.column-setting-popover .popover-title {
-  margin-bottom: 8px;
-  color: rgba(42, 46, 54, 0.88);
-  font-weight: 600;
-  border-bottom: none;
-  padding: 0;
 }
 
 .column-setting-popover .popover-title .column-setting-title {
