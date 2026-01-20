@@ -1,76 +1,74 @@
 <template>
   <div v-if="columns.length" class="column-setting-list">
     <div class="column-setting-list-title">{{ title }}</div>
-    <div
-      class="site-tree-list"
-      v-for="(column, index) in columns"
-      :class="{
-        'site-tree-list-draggable': draggable,
-        dragging: draggingItemProp === column.prop,
-      }"
-      :draggable="draggable"
-      :key="column.prop"
-      @dragstart="(e) => onDragstart(e, column.prop, index)"
-      @dragenter.prevent="(e) => onDragenter(e, column.prop, index)"
-    >
-      <span v-if="draggable" class="site-tree-draggable-icon">
-        <span class="icon icon-holder">
-          <HolderIcon />
+    <div ref="dragDropZoneRef" class="drag-drop-zone">
+      <div
+        class="site-tree-list"
+        v-for="(column, index) in columns"
+        :class="{
+          'site-tree-list-draggable': draggable,
+          dragging: draggingIndex === index,
+        }"
+        :draggable="draggable"
+        :key="column.prop"
+        @dragstart="(e) => onDragstart(e, index)"
+        @dragenter.prevent="onDragenter"
+        @dragover.prevent="(e) => onDragover(e, index)"
+        @dragleave="onDragleave"
+        @drop="(e) => onDrop(e, index)"
+        @dragend="onDragend"
+      >
+        <span v-if="draggable" class="site-tree-draggable-icon">
+          <span class="icon icon-holder">
+            <HolderIcon />
+          </span>
         </span>
-      </span>
-      <span class="site-tree-switcher"></span>
-      <template v-if="columnSettings.checkable">
-        <el-checkbox
-          :value="column.checked"
-          @change="(checked) => handleChange(checked, column.prop)"
-          :disabled="column.disabled"
-        >
-          <span class="tree-node-content-wrapper">{{ column.label }}</span>
-          <ColumnAlignSettings :column="column" />
-          <!-- 头部插入 -->
-          <!-- start -->
-          <Transition name="fade">
+        <span class="site-tree-switcher"></span>
+        <template v-if="columnSettings.checkable">
+          <el-checkbox
+            :value="column.checked"
+            @change="(checked) => handleChange(checked, column.prop)"
+            :disabled="column.disabled"
+          >
+            <span class="tree-node-content-wrapper">{{ column.label }}</span>
+            <ColumnAlignSettings :column="column" />
+            <!-- 第一个元素头部插入 -->
+            <!-- start -->
             <div
               v-if="index === 0 && showHeadIndicator"
               class="site-tree-top-head-indicator"
             ></div>
-          </Transition>
-          <!-- end -->
-          <!-- 尾部插入 -->
-          <!-- start -->
-          <Transition name="fade">
+            <!-- end -->
+            <!-- 尾部插入 -->
+            <!-- start -->
             <div
-              v-if="targetItemProp === column.prop"
+              v-else-if="droppedIndex === index"
               class="site-tree-drop-indicator"
             ></div>
-          </Transition>
-          <!-- end -->
-        </el-checkbox>
-      </template>
-      <template v-else>
-        <span class="tree-node-algin-wrapper">
-          <span class="tree-node-content-wrapper">{{ column.label }}</span>
-          <ColumnAlignSettings :column="column" />
-          <!-- 头部插入 -->
-          <!-- start -->
-          <Transition name="fade">
+            <!-- end -->
+          </el-checkbox>
+        </template>
+        <template v-else>
+          <span class="tree-node-algin-wrapper">
+            <span class="tree-node-content-wrapper">{{ column.label }}</span>
+            <ColumnAlignSettings :column="column" />
+            <!-- 第一个元素头部插入 -->
+            <!-- start -->
             <div
               v-if="index === 0 && showHeadIndicator"
               class="site-tree-top-head-indicator"
             ></div>
-          </Transition>
-          <!-- end -->
-          <!-- 尾部插入 -->
-          <!-- start -->
-          <Transition name="fade">
+            <!-- end -->
+            <!-- 尾部插入 -->
+            <!-- start -->
             <div
-              v-if="targetItemProp === column.prop"
+              v-else-if="droppedIndex === index"
               class="site-tree-drop-indicator"
             ></div>
-          </Transition>
-          <!-- end -->
-        </span>
-      </template>
+            <!-- end -->
+          </span>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -119,8 +117,8 @@ export default {
   },
   data() {
     return {
-      draggingItemProp: "", // 当前拖动列的属性
-      targetItemProp: "", // 释放目标列的属性
+      draggingIndex: -1, // 开始拖动目标的下标
+      droppedIndex: -1, // 可释放目标的下标
       showHeadIndicator: false, // 是否在头节点插入
     };
   },
@@ -135,32 +133,11 @@ export default {
       this.onColumnSettingsChange({ event: "check", checked, prop });
     },
     /**
-     * @desc 开始拖动
-     * @param {Object} e 拖拽元素对象
-     * @param {String} prop 属性
-     * @param {Number} index 下标
+     * @desc 获取光标位置
+     * @param {Object} e
+     * @returns {String} top | bottom
      */
-    onDragstart(e, prop, index) {
-      e.dataTransfer.effectAllowed = "move";
-      e.dataTransfer.dropEffect = "move";
-      e.dataTransfer.setData("from-index", index);
-      this.draggingItemProp = prop;
-    },
-    /**
-     * @desc 拖动进入到目标区域
-     * @param {Object} e 拖拽元素对象
-     * @param {String} prop 属性
-     * @param {Number} toIndex 下标
-     */
-    onDragenter(e, prop, toIndex) {
-      // ***参数是在事件绑定时确定的 而不是在事件触发时***
-
-      // 拖动开始的下标
-      if (this.draggingItemProp === prop) {
-        this.targetItemProp = null
-        return;
-      }
-
+    getCursorPos(e) {
       // 1. 获取元素的位置和尺寸
       const rect = e.target.getBoundingClientRect();
 
@@ -170,35 +147,148 @@ export default {
       // 3. 判断光标在释放目标位置的上半还是下半
       const cursorPos = relativeY < rect.height / 2 ? "top" : "bottom";
 
-      // 4. 判断当前拖拽的方向
-      const fromIndex = this.columns.findIndex(item => item.prop === this.draggingItemProp)
-      const dragDirection = fromIndex < toIndex ? "down" : "up";
-      
-      // 5. 光标在释放目标位置上半 则在释放目标位置上方插入
-      //    光标在释放目标位置下半 则在释放目标位置下方插入
-      this.showHeadIndicator = false // 需要在 drop 事件执行
+      return cursorPos      
+    },
+    /**
+     * @desc 活动释放目标位置
+     * @param {String} cursorPos top | bottom
+     * @param {String} dragDirection up | down
+     * @param {Number} droppedIndex 释放目标的下标
+     */
+    getDropPos(cursorPos, dragDirection, droppedIndex) {
       if (cursorPos === 'top') {
-        if (toIndex === 0) {
-          // 这里有点特殊 因为如果释放元素是下标为 0 时 需要在最上方显示插入标志
-          this.targetItemProp = null
-          this.showHeadIndicator = true
+        if (dragDirection === 'down' && this.draggingIndex === droppedIndex - 1) {
+          // 考虑到向下拖动的上一个位置可能是开始拖动的元素
+          return -1
         } else {
-          if (dragDirection === 'down' && fromIndex === toIndex - 1) {
-            // 考虑到向下拖动的上一个位置可能是开始拖动的元素
-            this.targetItemProp = null
-          } else {
-            this.targetItemProp = this.columns[toIndex - 1].prop
-          }
+          return droppedIndex - 1
         }
       } else {
-        if (dragDirection === 'up' && fromIndex === toIndex + 1) {
+        if (dragDirection === 'up' && this.draggingIndex === droppedIndex + 1) {
           // 考虑到向上拖动的下一个位置可能是开始拖动的元素
-          this.targetItemProp = null
+          return -1
         } else {
-          this.targetItemProp = prop
+          return droppedIndex
         }
       }
     },
+    /**
+     * @desc 开始拖动
+     * @param {Object} e 拖拽元素对象
+     * @param {Number} index 下标
+     */
+    onDragstart(e, index) {
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.dropEffect = "move";
+      this.draggingIndex = index;
+    },
+    /**
+     * @desc 拖入到释放目标
+     * @param {Object} e 拖拽元素对象
+     */
+    onDragenter(e) {
+      if (this.draggingIndex === -1) {
+        // 其它拖拽区域
+        e.dataTransfer.dropEffect = 'none'
+      } else {
+        e.dataTransfer.dropEffect = 'move'
+      }
+    },
+    /**
+     * @desc 拖拽到释放目标上
+     * @param {Object} e 释放目标对象
+     * @param {Number} droppedIndex 下标
+     */
+    onDragover(e, droppedIndex) {
+      // ***参数是在事件绑定时确定的 而不是在事件触发时***
+
+      // 如果拖动到其它列 
+      if (this.draggingIndex === -1) {
+        e.dataTransfer.dropEffect = 'none'
+        return
+      }
+
+      // 释放目标是开始拖动目标 则退出
+      if (this.draggingIndex === droppedIndex) {
+        this.droppedIndex = -1
+        return;
+      }
+
+      // 获取光标位置
+      const cursorPos = this.getCursorPos(e)
+      
+      // 光标在释放目标位置上半 则在释放目标位置上方插入
+      // 光标在释放目标位置下半 则在释放目标位置下方插入
+      if (cursorPos === 'top' && droppedIndex === 0) {
+        // 这里有点特殊 因为向上拖动且释放元素是下标为 0 时 需要在最上方显示插入标志
+        this.showHeadIndicator = true
+        this.droppedIndex = -1
+        return
+      }
+
+      // 取消插入到第一个元素的样式
+      this.showHeadIndicator = false
+
+      // 当前拖拽的方向
+      const dragDirection = this.draggingIndex < droppedIndex ? "down" : "up";
+      // 获取释放的位置
+      this.droppedIndex = this.getDropPos(cursorPos, dragDirection, droppedIndex)
+    },
+    /**
+     * @desc 离开可释放目标
+     */
+    onDragleave(e) {
+      const dragDropZoneRef = this.$refs.dragDropZoneRef
+      // 是否在列表区域内
+      if (dragDropZoneRef.contains(e.relatedTarget)) {
+        return
+      }
+
+      this.droppedIndex = -1
+      this.showHeadIndicator = false
+    },
+    /**
+     * @desc 释放目标停止拖拽
+     * @param {Object} e 释放目标对象
+     * @param {Number} droppedIndex 释放的下标
+     */
+    onDrop(e, droppedIndex) {
+      if (this.draggingIndex === droppedIndex) {
+        this.droppedIndex = -1
+        return;
+      }
+
+      // 获取光标位置
+      const cursorPos = this.getCursorPos(e)
+      if (cursorPos === 'top' && droppedIndex === 0) {
+        // 插入到第一个节点上面
+        const fromProp = this.columns[this.draggingIndex].prop
+        // ProTable provide 提供
+        this.onColumnSettingsChange({ event: 'drop', fromProp });
+        return
+      }
+
+      // 当前拖拽的方向
+      const dragDirection = this.draggingIndex < droppedIndex ? "down" : "up";
+      // 实际释放的位置
+      const actualDroppedIndex = this.getDropPos(cursorPos, dragDirection, droppedIndex)
+      // 开始拖动元素插入实际释放的位置下面 && 二者不能相同
+      if (actualDroppedIndex !== -1) {
+        const fromProp = this.columns[this.draggingIndex].prop
+        const toProp = this.columns[this.droppedIndex].prop
+        // ProTable provide 提供
+        this.onColumnSettingsChange({ event: 'drop', fromProp, toProp })
+      }
+    },
+    /**
+     * @desc 结束拖动
+     */
+    onDragend() {
+      // 重置
+      this.draggingIndex = -1
+      this.droppedIndex = -1
+      this.showHeadIndicator = false
+    }
   },
 };
 </script>
@@ -378,15 +468,6 @@ export default {
   border-radius: 50%;
   content: "";
   box-sizing: border-box;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
 }
 
 @keyframes show {

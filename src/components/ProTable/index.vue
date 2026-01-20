@@ -83,6 +83,7 @@
       :data="tableData"
       v-bind="{ size: defaultSize, ...tableProps }"
       v-on="initializedTableEvents"
+      :key="tableKey"
     >
       <el-table-column
         v-for="column in normalizedColumns"
@@ -355,8 +356,7 @@ export default {
       // 列设置处理
       if (columnSettings) {
         const { columnSettingsRule } = this;
-        return (
-          normalizedColumns
+        return normalizedColumns
             // 勾选、取消勾选（包含全选）
             .filter((item) => {
               const index = columnSettingsRule.findIndex(
@@ -375,13 +375,14 @@ export default {
                 (item) => item.prop === (col.prop || col.key)
               );
               if (rule) {
-                const { fixed } = rule;
-                return { ...col, fixed };
+                const { fixed, position } = rule;
+                return { ...col, fixed, position };
               }
 
               return col;
             })
-        );
+            // 从小到大排序
+            .sort((a, b) => a.position - b.position)
       }
 
       return normalizedColumns;
@@ -463,6 +464,7 @@ export default {
       pageNum: 1, // 页码
       pageSize: this.paginationProps["page-size"] || 10, // 页数
       columnSettingsRule: [], // 列数据规则 勾选或排序
+      tableKey: 1, // 表格 key
     };
   },
   watch: {
@@ -751,7 +753,7 @@ export default {
       const { columnSettingsRule } = this;
       const index = columnSettingsRule.findIndex((item) => item.prop === prop);
       if (index !== -1) {
-        this.columnSettingsRule.splice(index, 1, {
+        columnSettingsRule.splice(index, 1, {
           ...columnSettingsRule[index],
           checked,
         });
@@ -786,7 +788,7 @@ export default {
       const index = columnSettingsRule.findIndex((item) => item.prop === prop);
       if (index !== -1) {
         const rule = columnSettingsRule[index];
-        this.columnSettingsRule.splice(index, 1, { ...rule, fixed });
+        columnSettingsRule.splice(index, 1, { ...rule, fixed });
       }
     },
     /**
@@ -805,12 +807,70 @@ export default {
       this.initializeColumnSettingsRule(false);
     },
     /**
+     * @desc 拖拽更新
+     * @param {String} fromProp 开始拖动的列的 prop
+     * @param {String | undefined} toProp 要插入的列的 prop
+     */
+    handleDropRule(fromProp, toProp) {
+      const { columnSettingsRule } = this
+      const fromIndex = columnSettingsRule.findIndex(item => (item.prop || item.key) === fromProp)
+      if (fromIndex === -1) {
+        return
+      }
+      const fromColumn = columnSettingsRule[fromIndex]
+      // 插入在之前的位置
+      let toIndex
+      if (toProp) {
+        const index = columnSettingsRule.findIndex(item => (item.prop || item.key) === toProp)
+        if (index === -1) {
+          return
+        }
+
+        toIndex = index + 1
+      } else {
+        toIndex = 0
+      }
+
+      // 拖拽方向
+      const isDown = fromIndex < toIndex
+      // 定义开始下标、结束下标
+      let startIndex, endIndex
+      startIndex = isDown ? fromIndex + 1 : toIndex
+      endIndex = isDown ? toIndex : fromIndex
+      // 数组长度
+      const length = columnSettingsRule.length
+      // 插入后的 position
+      let toPosition
+      // 记录插入元素的 position
+      if (toIndex === length) {
+        // 超出数组边界
+        toPosition = columnSettingsRule[length - 1].position
+      } else {
+        toPosition = (isDown ? -1 : 0) + columnSettingsRule[toIndex].position
+      }
+
+      for(let i = startIndex; i < Math.min(toIndex, length); i++) {
+        const column = columnSettingsRule[i]
+        columnSettingsRule.splice(i, 1, { ...column, position: isDown ? column.position - 1 : column.position + 1 })
+      }
+
+      if (isDown) {
+        // 先插入 后删除
+        columnSettingsRule.splice(toIndex, 0 , { ...fromColumn, position: toPosition })
+        columnSettingsRule.splice(fromIndex, 1)
+      } else {
+        // 先删除 后插入
+        columnSettingsRule.splice(fromIndex, 1)
+        columnSettingsRule.splice(toIndex, 0, { ...fromColumn, position: toPosition })
+      }
+    },
+    /**
      * @desc 监听列设置修改
      * @param { Object } data 数据
      * @param {String} data.event 事件类型
      */
     onColumnSettingsChange(data) {
-      const { event, prop, checked, fixed } = data;
+      const { event, prop, checked, fixed, fromProp, toProp } = data;
       // 勾选或取消勾选
       switch (event) {
         case "check":
@@ -827,6 +887,12 @@ export default {
         case "reset":
           this.handleResetRule();
           this.doLayout();
+          break;
+          case 'drop':
+            this.handleDropRule(fromProp, toProp)
+            // 更新 table key
+            this.tableKey = Math.random().toString().slice(2, 10)
+            this.doLayout();
           break;
         default:
           break;
