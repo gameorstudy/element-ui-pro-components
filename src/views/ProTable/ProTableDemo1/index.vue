@@ -12,10 +12,7 @@
         pageKey: 'page',
         sizeKey: 'size',
       }"
-      :columnSettings="{
-        persistenceType: 'sessionStorage',
-        persistenceKey: 'proTableKey',
-      }"
+      :columnSettings="false"
       :manualRequest="true"
       @onCollapse="handleCollapse"
       @onParams="onParams"
@@ -25,6 +22,13 @@
       <template #state-label="{ formItem }">
         <span style="color: red">{{ formItem.label }}</span>
       </template>
+      <!-- end -->
+      <!-- default slot -->
+      <!-- start -->
+      <!-- <div style="flex: 1; display: flex; justify-content: space-between; margin-right: 10px;">
+        <el-button type="primary">新建</el-button>
+        <el-button>最右侧按钮</el-button>
+      </div> -->
       <!-- end -->
     </ProTable>
     <el-button type="primary" @click="handleClick">切换</el-button>

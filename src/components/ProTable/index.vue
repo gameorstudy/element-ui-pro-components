@@ -61,9 +61,9 @@
     <!-- end -->
     <!-- slot -->
     <!-- start -->
-    <div class="pro-table-toolbar">
+    <div v-if="columnSettings || $slots.default" class="pro-table-toolbar">
       <slot></slot>
-      <div class="toolbar-items">
+      <div v-if="columnSettings" class="toolbar-items">
         <!-- 列设置 -->
         <!-- start -->
         <ColumnSettings
