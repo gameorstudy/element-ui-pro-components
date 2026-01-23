@@ -25,8 +25,8 @@ ProForm 在 el-form 上进行了一层封装，支持了一些预设，并且封
 ##### ProForm Methods
 | 属性 | 描述 | 类型 | 默认值 |
 | ----------- | ----------- | ----------- | ----------- |
-| getFormRef | 获取 el-form 的 ref | `object` | - |
-| getForm | 获取表单数据 | `object` | - |
+| getFormRef | 获取 el-form 的 ref | `() => Ref` | - |
+| getForm | 获取表单数据 | `() => Ref` | - |
 | setFieldsValue | 手动更新表单数据 | `(object) => void` | - |
 | setFieldValue | 手动更新单个字段数据 | `(key, value) => void` | - |
 | reset | 重置表单 | `() => void` | - |

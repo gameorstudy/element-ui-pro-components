@@ -140,14 +140,15 @@ import {
   setPlaceholder,
   setSelectOptions,
   setCascaderOptions,
-} from "../../utils/form";
+} from "@/utils/form";
 import {
   defaultColConfig,
   BREAKPOINT_ORDER,
   GRID_COLUMNS,
   calculateCurrentSpan,
-} from "../../utils/breakpoints";
+} from "@/utils/breakpoints";
 import { debounce } from "@/utils/debounce";
+import { generateCryptoUID } from '@/utils/uid'
 import ColumnSettings from "./components/ColumnSettings.vue";
 
 export default {
@@ -891,7 +892,7 @@ export default {
           case 'drop':
             this.handleDropRule(fromProp, toProp)
             // 更新 table key
-            this.tableKey = Math.random().toString().slice(2, 10)
+            this.tableKey = generateCryptoUID()
             this.doLayout();
           break;
         default:

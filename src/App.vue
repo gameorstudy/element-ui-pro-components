@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <ProTableDemo1 />
+    <EditableTableDemo1 />
   </div>
 </template>
 
 <script>
-import ProTableDemo1 from './views/ProTable/ProTableDemo1'
+import EditableTableDemo1 from './views/EditableTable/EditableTableDemo1'
 
 export default {
   name: 'App',
   components: {
-    ProTableDemo1
+    EditableTableDemo1
   }
 }
 </script>

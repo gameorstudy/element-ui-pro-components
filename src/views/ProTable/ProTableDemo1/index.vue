@@ -12,7 +12,6 @@
         pageKey: 'page',
         sizeKey: 'size',
       }"
-      :columnSettings="false"
       :manualRequest="true"
       @onCollapse="handleCollapse"
       @onParams="onParams"
