@@ -41,18 +41,18 @@ module.exports = {
 | 属性 | 描述 | 类型 | 默认值 |
 | ----------- | ----------- | ----------- | ----------- |
 | controlled | 是否受控，如果受控则新建、删除需要手动操作 dataSource | `boolean` | `false` |
-| dataSource | 传入一个数组，是 table 渲染的元数据。如果受控，异步数据需要传入方法 | `T[]` \| `()=>Promise.resolve([])` | `[]` |
-| rowKey | 对应 el-table 的 row-key，受控时该属性是必填的，防止编辑、校验提示等行为异常，可以是 uid。非受控时会默认添加 temp_uid 作为 row-key | `String` | - |
-| recordCreatorProps | 新建一行数据的相关配置 | `RecordCreatorProps` & `ButtonProps` | - |
+| dataSource | 传入一个数组，是 table 渲染的元数据。非受控时异步数据需要传入方法 | `T[]` \| `()=>Promise.resolve([])` | `undefined` |
+| rowKey | 对应 el-table 的 row-key，受控时该属性是必填的，防止导致编辑出错、校验提示错位等异常，可以是 uid。非受控时会默认添加 temp_uid 作为 row-key | `String` | - |
+| recordCreatorProps | 新建一行数据的相关配置 | `RecordCreatorProps` | - |
 | maxLength | 最大的行数，到达最大行数新建按钮会自动消失 | `number` | - |
 | editable | 可编辑表格的相关配置 | `TableRowEditable` | - |
-| loading | 表格数据请求加载状态，非受控模式会自动在异步获取数组时触发 | `boolean` | - |
+| loading | 表格数据请求加载状态，非受控时传入的是异步数据会自动添加 | `boolean` | - |
+| formClassName | 组件内 el-form 的 `className` | `string` | - |
 | tableClassName | 组件内 el-table 的 `className` | `string` | - |
 | tableProps | el-table attributes 的配置 | [TableProps](https://element.eleme.io/2.15/#/zh-CN/component/table) | - |
 | tableEvents | el-table events | [TableEvents](https://element.eleme.io/2.15/#/zh-CN/component/table) | - |
 | columns | 列表项配置 | `columnsConfig` | - |
 | defaultSize | 默认的 size | `medium` \| `small` \| `mini` | - |
-| addRowRecord | 新增一行的方法，用于受控模式添加 rowKey 值。非受控时会覆盖默认行为 | `(defaultRowData: T) => void` | - |
 ##### EditableTable Events
 | 属性 | 描述 | 类型 | 默认值 |
 | ----------- | ----------- | ----------- | ----------- |
@@ -72,6 +72,8 @@ module.exports = {
 | newRecordType | 新增一行的方式，默认是缓存，取消后就会消失。如果设置为 dataSource，取消后也不会消失，只能删除 | `dataSource` \| `any` | - |
 | creatorButtonText | 设置按钮文案 | `新增一行` | - |
 | style | 按钮的样式设置，可以设置按钮是否显示，这样可以做最大行限制和最小行限制之类的功能 | `Object` | - |
+| buttonProps | el-button 的属性 | [el-button attributes](https://element.eleme.cn/#/zh-CN/component/button#attributes) | - |
+| addRowRecord | 新增一行的方法。受控时用于手动添加 rowKey 值，非受控时会覆盖默认行为 | `(defaultRowData: T) => void` | - |
 ##### TableRowEditable
 | 属性 | 描述 | 类型 | 默认值 |
 | ----------- | ----------- | ----------- | ----------- |
@@ -101,6 +103,7 @@ module.exports = {
 | key | 对于没有 `prop` 的 `column` 必须提供一个 `key` 用于渲染 | `String` | - |
 | hideInTable | 在 el-table 中不展示此项 | `boolean` | - |
 | initialValue | 表单初始值，新建一行数据会默认绑定 | `any` | - |
+| renderCell | 类似自定义 table-column 的 `slot`。 | `(scope) => jsxElement` | - |
 | renderCellHeader | 因为 el-table 默认的 render-header 属性写法在控制台会打印警告，提示使用 `slot`，所以重写。| `(scope) => jsxElement` | - |
 > 当使用 Radio 单选框和 Checkbox 多选框时，type 分别传 radio-group 和 checkbox-group，options 传 [{ label: '标签', value: '值' }] 生成选项。
 当 select 要使用分组时，只需要传递正确的[数据结构](https://element.eleme.io/2.15/#/zh-CN/component/select#fen-zu)即可，判断依据是列表第一条数据包含 options 数组。

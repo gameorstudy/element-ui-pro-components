@@ -2,7 +2,10 @@
   <!-- 默认 el-form-item -->
   <!-- start -->
   <el-form-item
-    v-bind="filteredItem"
+    v-bind="{
+      ...filteredItem,
+      prop: formProp || filteredItem.prop
+    }"
     :key="item.prop"
   >
     <template v-if="item.labelSlot" #label>
@@ -81,12 +84,16 @@
       form: {
         type: Object,
         required: true
+      },
+      // 可编辑表格 el-form-item prop
+      formProp: {
+        type: String
       }
     },
     computed: {
       // 过滤非 el-form-item 的属性
       filteredItem() {
-        const { 
+        const {
           valueType,
           fieldProps, 
           fieldEvents, 
