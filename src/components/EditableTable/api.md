@@ -69,7 +69,7 @@ module.exports = {
 | 属性 | 描述 | 类型 | 默认值 |
 | ----------- | ----------- | ----------- | ----------- |
 | position | 顶部添加还是末尾添加 | `top` \| `bottom` | `bottom` |
-| newRecordType | 新增一行的方式，默认是缓存，取消后就会消失。如果设置为 dataSource，取消后也不会消失，只能删除 | `dataSource` \| `any` | - |
+| newRecordType | 新增一行的方式，默认是缓存，取消后就会消失。如果设置为 dataSource，取消后也不会消失，只能删除 | `dataSource` \| `cache` | `cache` |
 | creatorButtonText | 设置按钮文案 | `新增一行` | - |
 | style | 按钮的样式设置，可以设置按钮是否显示，这样可以做最大行限制和最小行限制之类的功能 | `Object` | - |
 | buttonProps | el-button 的属性 | [el-button attributes](https://element.eleme.cn/#/zh-CN/component/button#attributes) | - |

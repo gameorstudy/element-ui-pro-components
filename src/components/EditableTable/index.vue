@@ -4,51 +4,72 @@
         :class="formClassName"
         :model="form"
     >
-        <el-table 
-            :class="tableClassName"
-            v-loading="globalLoading"
-            :data="form.dataSource"
-            v-bind="initializedTableProps"
-            v-on="tableEvents"
-        >
-            <el-table-column 
-                v-for="column in normalizedColumns"
-                v-bind="{
-                    ...column,
-                    formItem: undefined,
-                    key: undefined,
-                    renderCellHeader: undefined,
-                    renderCell: undefined,
-                    valueEnum: undefined,
-                }"
-                :key="column.prop || column.key"
+        <div :class="tableClassName" v-loading="globalLoading">
+            <el-table class="thead-table">
+                <el-table-column 
+                    v-for="column in normalizedColumns"
+                    v-bind="{
+                        ...column,
+                        formItem: undefined,
+                        key: undefined,
+                        renderCellHeader: undefined,
+                        renderCell: undefined,
+                        valueEnum: undefined,
+                    }"
+                    :key="column.prop || column.key"
+                >
+                    <template v-if="column.renderCellHeader" #header="scope">
+                        <!-- 覆写头部 -->
+                        <!-- start -->
+                        <custom-render :render="() => column.renderCellHeader(scope)" />
+                        <!-- end -->
+                    </template>
+                </el-table-column>
+                <template #empty>
+                    <el-button class="btn-add" plain icon="el-icon-plus">添加一行数据</el-button>
+                </template>
+            </el-table>
+            <el-table 
+                ref="tableRef"
+                :show-header="false"
+                :data="form.dataSource"
+                v-bind="initializedTableProps"
+                v-on="tableEvents"
             >
-                <template v-if="column.renderCellHeader" #header="scope">
-                    <!-- 覆写头部 -->
-                    <!-- start -->
-                    <custom-render :render="() => column.renderCellHeader(scope)" />
-                    <!-- end -->
-                </template>
-                <template #default="scope">
-                    <!-- pro-form-item -->
-                    <!-- start -->
-                    <ProFormItem
-                        :indexProp="`dataSource.${scope.$index}.${column.prop}`"
-                        :item="column.formItem" 
-                        :form="scope.row"
-                    />
-                    <!-- end -->
-                    <!-- <el-form-item>
-                        <template v-if="column.renderCell" #default="scope">
-                            自定义 render
-                            start
-                            <custom-render :render="() => column.renderCell(scope)" />
-                            end
-                        </template>
-                    </el-form-item> -->
-                </template>
-            </el-table-column>
-        </el-table>
+                <el-table-column 
+                    v-for="column in normalizedColumns"
+                    v-bind="{
+                        ...column,
+                        formItem: undefined,
+                        key: undefined,
+                        renderCellHeader: undefined,
+                        renderCell: undefined,
+                        valueEnum: undefined,
+                    }"
+                    :key="column.prop || column.key"
+                >
+                    <template #default="scope">
+                        <!-- pro-form-item -->
+                        <!-- start -->
+                        <ProFormItem
+                            :indexProp="`dataSource.${scope.$index}.${column.prop}`"
+                            :item="column.formItem" 
+                            :form="scope.row"
+                        />
+                        <!-- end -->
+                        <!-- <el-form-item>
+                            <template v-if="column.renderCell" #default="scope">
+                                自定义 render
+                                start
+                                <custom-render :render="() => column.renderCell(scope)" />
+                                end
+                            </template>
+                        </el-form-item> -->
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-button class="btn-add" plain icon="el-icon-plus" style="margin: 10px 0">添加一行数据</el-button>
+        </div>
     </el-form>
 </template>
 
@@ -133,10 +154,6 @@ export default {
             validator: function (value) {
                 return ["medium", "small", "mini"].includes(value);
             },
-        },
-        // 新增一行的方法。受控时用于手动添加 rowKey 值，非受控时会覆盖默认行为
-        addRowRecord: { // todo
-            type: Function,
         },
     },
     computed: {
@@ -251,6 +268,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+.editable-table .thead-table .el-table__empty-block {
+    min-height: unset;
+}
 
+.editable-table .thead-table .el-table__empty-text {
+    width: 100%;
+}
+
+.editable-table .btn-add {
+    width: 100%;
+    border-style: dashed;
+}
 </style>
