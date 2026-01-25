@@ -48,7 +48,7 @@ module.exports = {
 | editable | 可编辑表格的相关配置 | `TableRowEditable` | - |
 | loading | 表格数据请求加载状态，非受控时传入的是异步数据会自动添加 | `boolean` | - |
 | formClassName | 组件内 el-form 的 `className` | `string` | - |
-| tableClassName | 组件内 el-table 的 `className` | `string` | - |
+| tableClassName | 组件内 el-table 的父盒子 `className` | `string` | - |
 | tableProps | el-table attributes 的配置 | [TableProps](https://element.eleme.io/2.15/#/zh-CN/component/table) | - |
 | tableEvents | el-table events | [TableEvents](https://element.eleme.io/2.15/#/zh-CN/component/table) | - |
 | columns | 列表项配置 | `columnsConfig` | - |
@@ -70,7 +70,7 @@ module.exports = {
 | ----------- | ----------- | ----------- | ----------- |
 | position | 顶部添加还是末尾添加 | `top` \| `bottom` | `bottom` |
 | newRecordType | 新增一行的方式，默认是缓存，取消后就会消失。如果设置为 dataSource，取消后也不会消失，只能删除 | `dataSource` \| `cache` | `cache` |
-| creatorButtonText | 设置按钮文案 | `新增一行` | - |
+| creatorButtonText | 设置按钮文案 | `String` | `添加一行数据` |
 | style | 按钮的样式设置，可以设置按钮是否显示，这样可以做最大行限制和最小行限制之类的功能 | `Object` | - |
 | buttonProps | el-button 的属性 | [el-button attributes](https://element.eleme.cn/#/zh-CN/component/button#attributes) | - |
 | addRowRecord | 新增一行的方法。受控时用于手动添加 rowKey 值，非受控时会覆盖默认行为 | `(defaultRowData: T) => void` | - |

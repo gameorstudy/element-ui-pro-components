@@ -1,67 +1,53 @@
 <template>
-  <div>
-    <el-form :model="form" size="small">
-      <el-table :data="form.dataSource" size="small">
-        <el-table-column label="名称">
-          <template #default="scope">
-            <el-form-item
-              :prop="`dataSource.${scope.$index}.name`"
-              :rules="{ required: true, message: '请输入名称', trigger: ['blur'] }"
-              >
-              <el-input
-                v-model="scope.row.name"
-                placeholder="请输入名称"
-              />
-            </el-form-item>
-          </template>
-        </el-table-column>
-        <el-table-column label="年龄">
-          <template #default="scope">
-            <el-form-item
-              :prop="`dataSource.${scope.$index}.age`"          
-              :rules="{ required: true, message: '请输入年龄', trigger: ['blur'] }"
-            >
-              <el-input
-                v-model="scope.row.age"
-                placeholder="请输入年龄"
-              />
-            </el-form-item>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-form>
-    <el-button type="primary" @click="handleAdd">添加到底部</el-button>
-    <el-button type="primary" @click="handleAddHead">添加到顶部</el-button>
-  </div>
+    <EditableTable
+        :columns="columns"
+        :dataSource="dataSource"
+        defaultSize="small"
+    />
 </template>
 
 <script>
-  import { generateCryptoUID } from '@/utils/uid';
+import EditableTable from '../../../components/EditableTable'
 
-  export default {
+export default {
     name: 'EditableTableDemo1',
-    data() {
-      return {
-        form: {
-          dataSource: [
-            { name: '', age: '' }
-          ],
+    components: {
+        EditableTable
+    },
+    computed: {
+        columns() {
+            return [
+                {
+                    label: '名称',
+                    prop: "title",
+                    valueType: 'input',
+                },
+                {
+                    label: '年龄',
+                    prop: 'age',
+                    valueType: 'input'
+                }
+            ]
         }
-      }
     },
-    methods: {
-      getItemProp(row, field) {
-        const index = this.dataSource.findIndex(item => row.uid === item.uid)
-        return `${index}.${field}`
-      },
-      handleAdd() {
-        this.form.dataSource.push({ name: '', age: '', uid: generateCryptoUID() })
-      },
-      handleAddHead() {
-        this.form.dataSource.unshift({ name: '', age: '', uid: generateCryptoUID() })
-      }
+    data() {
+        return {
+            dataSource: undefined
+        }
     },
-  }
+    created() {
+        this.dataSource = () => {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve([
+                        { title: '标题一', age: 10 },
+                        { title: '标题二', age: 18 }
+                    ])
+                }, 1000)
+            })
+        }
+    }
+}
 </script>
 
 <style scoped>

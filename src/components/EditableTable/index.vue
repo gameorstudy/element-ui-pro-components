@@ -3,6 +3,7 @@
         class="editable-table" 
         :class="formClassName"
         :model="form"
+        :size="defaultSize"
     >
         <div :class="tableClassName" v-loading="globalLoading">
             <el-table class="thead-table">
@@ -26,7 +27,7 @@
                     </template>
                 </el-table-column>
                 <template #empty>
-                    <el-button class="btn-add" plain icon="el-icon-plus">添加一行数据</el-button>
+                    <el-button class="btn-add" plain :size="defaultSize" icon="el-icon-plus">添加一行数据</el-button>
                 </template>
             </el-table>
             <el-table 
@@ -68,7 +69,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-button class="btn-add" plain icon="el-icon-plus" style="margin: 10px 0">添加一行数据</el-button>
+            <el-button class="btn-add" plain icon="el-icon-plus" :size="defaultSize" style="margin: 10px 0">添加一行数据</el-button>
         </div>
     </el-form>
 </template>
@@ -129,7 +130,7 @@ export default {
         formClassName: {
             type: String,
         },
-        // 组件内 el-table 的 className
+        // 组件内 el-table 的父盒子 className
         tableClassName: {
             type: String,
         },
@@ -144,7 +145,7 @@ export default {
             default: () => ({})
         },
         // 列设置
-        columns: { // todo
+        columns: {
             type: Array,
             required: true
         },
