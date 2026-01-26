@@ -1,9 +1,15 @@
 <template>
-    <EditableTable
-        :columns="columns"
-        :dataSource="dataSource"
-        defaultSize="small"
-    />
+    <div class="editable-table-demo1">
+        <EditableTable
+            ref="editableTableRef"
+            :columns="columns"
+            :dataSource="dataSource"
+            defaultSize="small"
+        />
+        <el-button type="primary" @click="getRowData">获取第二行数据</el-button>
+        <el-button type="primary" @click="getRowsData">获取全部数据</el-button>
+        <el-button type="primary" @click="setRowData">修改第一行数据</el-button>
+    </div>
 </template>
 
 <script>
@@ -26,6 +32,16 @@ export default {
                     label: '年龄',
                     prop: 'age',
                     valueType: 'input'
+                },
+                {
+                    label: '操作',
+                    valueType: 'option',
+                    key: 'action',
+                    renderCell: (scope, action) => (
+                        [                            
+                            <el-button key="editable" type="text">编辑</el-button>
+                        ]
+                    ),
                 }
             ]
         }
@@ -46,7 +62,20 @@ export default {
                 }, 1000)
             })
         }
-    }
+    },
+    methods: {
+        getRowData() {
+            const data = this.$refs.editableTableRef.getRowData(1)
+            console.log(data)
+        },
+        getRowsData() {
+            const data = this.$refs.editableTableRef.getRowsData()
+            console.log(data)
+        },
+        setRowData() {
+            this.$refs.editableTableRef.setRowData(0, { title: 'hello world', age: 25 })
+        }
+    },
 }
 </script>
 

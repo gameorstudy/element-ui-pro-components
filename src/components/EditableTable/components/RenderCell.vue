@@ -1,6 +1,6 @@
 <script>
   export default {
-    name: 'CustomRender',
+    name: 'RenderCell',
     props: {
       render: {
         type: Function,
@@ -8,7 +8,11 @@
       }
     },
     render: function(h) {
-      return this.render()
+      const dom = this.render()
+      console.log('dom', dom)
+      return <Fragment>
+        { dom }
+      </Fragment>
     }
   }
 </script>

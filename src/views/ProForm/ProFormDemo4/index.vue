@@ -28,7 +28,7 @@
       <!-- end -->
       <!-- submitter -->
       <!-- start -->
-      <template #submitter="{ events: { submit, reset }}">
+      <template #submitter="{ action: { submit, reset }}">
         <el-form-item>
           <el-button type="primary" @click="submit">立即创建</el-button>
           <el-button @click="reset">重置</el-button>

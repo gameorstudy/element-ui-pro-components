@@ -112,15 +112,16 @@ export default {
         },
         {
           width: 120,
+          valueType: 'option',
           label: "操作",
           fixed: "right",
           disabled: true,
           key: "action",
           renderCell: (scope) => (
-            <span>
-              <el-button type="text">详情</el-button>
+            [
+              <el-button type="text">详情</el-button>,
               <el-button type="text">编辑</el-button>
-            </span>
+            ]
           ),
         },
       ];

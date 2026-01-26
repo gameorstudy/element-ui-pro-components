@@ -136,7 +136,7 @@ paginationConfig = {
 | 属性 | 描述 | 类型 | 默认值 |
 | ----------- | ----------- | ----------- | ----------- |
 | formItemProps | 传递给 el-form-item 的 attributes 配置，rules 配置不生效 | [FormItemProps](https://element.eleme.io/2.15/#/zh-CN/component/form#form-item-attributes) | - |
-| valueType | 表单组件类型，会生成不同的渲染器，对应 `element` 的值，比如 `input` `select` `date-picker`；如果填 slot 支持自定义，name 取表单配置项或表格的 prop 值 | `el-[element]` \| `slot` | - |
+| valueType | 表单组件类型，会生成不同的渲染器。值为 `input` `select` `date-picker`，会生成 `el-[element]`；值为 `slot` 表示自定义，name 取表单配置项的 `prop` 值；值为 `option` 时指操作列 | `el-[element]` \| `slot` \| `option` | - |
 | fieldProps | 查询表单的 attributes，会透传给表单项，如果渲染出来的是 input，就支持 input 的所有 props，同理如果是 select，也支持 select 的所有 props。| `object` | - |
 | fieldEvents | 查询表单的 events，会透传给表单项，如果渲染出来的是 input，就支持 input 的所有 events，同理如果是 select，也支持 select 的所有 events。| `object` | - |
 | options | el-select, el-checkbox-group, el-radio-group 的数据格式，详见下面提示 | `Array` | - |
@@ -147,7 +147,7 @@ paginationConfig = {
 | labelSlot | 标签文本的内容，同 [Form-Item Slot label](https://element.eleme.io/2.15/#/zh-CN/component/form#form-item-slot)，name 取表单配置项或表格的 `[prop]-label` 值 | `boolean` | - |
 | hideInSearch | 在查询表单中不展示此项, `valueType` 存在时不设置 `true` 时默认展示在搜索表单中 | `boolean` | - |
 | hideInTable | 在 el-table 中不展示此项 | `boolean` | - |
-| initialValue | 表单初始值，优先级高于 initialValues，<font color="#f56c6c">不建议一个 prop 同时设置 initialValue 和 initialValues</font> | `any` | - |
+| initialValue | 表单默认值，优先级高于 initialValues，<font color="#f56c6c">不建议一个 prop 同时设置 initialValue 和 initialValues</font> | `any` | - |
 | disabled | 列设置中 `disabled` 的状态 | `boolean` \| `{ checkbox: boolean; }` | - |
 | renderCell | 类似自定义 table-column 的 `slot`。 | `(scope) => jsxElement` | - |
 | renderCellHeader | 因为 el-table 默认的 render-header 属性写法在控制台会打印警告，提示使用 `slot`，所以重写。| `(scope) => jsxElement` | - |

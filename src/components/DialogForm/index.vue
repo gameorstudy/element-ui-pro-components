@@ -70,7 +70,7 @@
       <!-- 自定义 submitter -->
       <!-- start -->
       <template v-if="submitter.slot">
-        <slot name="submitter" :events="{ reset, resetAllFields, submit }" :form="form"></slot>
+        <slot name="submitter" :action="{ reset, resetAllFields, submit }" :form="form"></slot>
       </template>
       <!-- end -->
       <!-- 默认 submitter -->

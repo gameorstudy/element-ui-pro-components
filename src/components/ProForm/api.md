@@ -63,12 +63,12 @@ submitter = {
 ##### submitter slot
 | name | 描述 |
 | ----------- | ----------- |
-| submitter | 自定义按钮，参数为 { events: { reset, resetAllFields, submit }, form } |
+| submitter | 自定义按钮，参数为 { action: { reset, resetAllFields, submit }, form } |
 ##### formItemsConfig 包含了 element ui [form item attributes](https://element.eleme.io/2.15/#/zh-CN/component/form#form-item-attributes)
 新增属性如下表
 | 属性 | 描述 | 类型 | 默认值 |
 | ----------- | ----------- | ----------- | ----------- |
-| valueType | 表单组件类型，会生成不同的渲染器，对应 `element` 的值，比如 `input` `select` `date-picker`；如果是 slot 支持自定义，name 取 prop 值 | `el-[element]` \| `slot` | - |
+| valueType | 表单组件类型，会生成不同的渲染器。值为 `input` `select` `date-picker`，会生成 `el-[element]`；值为 `slot` 表示自定义，name 取表单配置项的 `prop` 值 | `el-[element]` \| `slot` | - |
 | fieldProps | 查询表单的 attributes，会透传给表单项，如果渲染出来的是 input，就支持 input 的所有 props，同理如果是 select，也支持 select 的所有 props。| `object` | - |
 | fieldEvents | 查询表单的 events，会透传给表单项，如果渲染出来的是 input，就支持 input 的所有 events，同理如果是 select，也支持 select 的所有 events。| `object` | - |
 | options | el-select, el-checkbox-group, el-radio-group 的数据格式，详见下面提示 | `Array` | - |

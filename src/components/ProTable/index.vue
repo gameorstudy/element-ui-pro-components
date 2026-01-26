@@ -135,7 +135,7 @@
 <script>
 import ProFormItem from "../ProFormItem";
 import ArrowIcon from "./components/svg/ArrowIcon.vue";
-import CustomRender from "./components/CustomRender.vue";
+import CustomRender from "@/components/CustomRender";
 import {
   setPlaceholder,
   setSelectOptions,
@@ -280,8 +280,8 @@ export default {
       const { columns } = this;
       return (
         columns
-          // 过滤隐藏的 && 无表单类型的
-          .filter((item) => !item.hideInSearch && item.valueType)
+          // 过滤隐藏的 && 无表单类型的 && 操作栏
+          .filter((item) => !item.hideInSearch && item.valueType && item.valueType !== 'option')
           // 权重大排序在前
           .sort((a, b) => b - a)
           // 筛选
@@ -627,7 +627,7 @@ export default {
 
       const data = columns
         // 筛选表单类型
-        .filter((item) => item.valueType)
+        .filter((item) => item.valueType && item.valueType !== 'option')
         .reduce((accu, cur) => {
           const { prop, initialValue, fieldProps } = cur;
           const key = fieldProps?.prop || prop;

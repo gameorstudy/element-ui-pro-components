@@ -27,7 +27,7 @@
       <!-- end -->
       <!-- submitter -->
       <!-- start -->
-      <template #submitter="{ events: { submit, reset }}">
+      <template #submitter="{ action: { submit, reset }}">
         <el-form-item>
           <el-button type="primary" @click="submit">提交</el-button>
           <el-button @click="addDomain">新增域名</el-button>

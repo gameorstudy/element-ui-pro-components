@@ -1,12 +1,13 @@
 <template>
     <el-form 
+        ref="formRef"
         class="editable-table" 
         :class="formClassName"
         :model="form"
         :size="defaultSize"
     >
         <div :class="tableClassName" v-loading="globalLoading">
-            <el-table class="thead-table">
+            <el-table v-if="initializedRecordCreatorProps.position === 'top'" class="thead-table">
                 <el-table-column 
                     v-for="column in normalizedColumns"
                     v-bind="{
@@ -27,12 +28,22 @@
                     </template>
                 </el-table-column>
                 <template #empty>
-                    <el-button class="btn-add" plain :size="defaultSize" icon="el-icon-plus">添加一行数据</el-button>
+                    <el-button 
+                        class="btn-add"
+                        plain 
+                        :size="defaultSize" 
+                        icon="el-icon-plus"
+                        :style="initializedRecordCreatorProps.style"
+                        v-bind="initializedRecordCreatorProps.buttonProps"
+                        @click="handleAdd"
+                    >
+                        {{ initializedRecordCreatorProps.creatorButtonText }}
+                    </el-button>
                 </template>
             </el-table>
             <el-table 
                 ref="tableRef"
-                :show-header="false"
+                :show-header="initializedRecordCreatorProps.position !== 'top'"
                 :data="form.dataSource"
                 v-bind="initializedTableProps"
                 v-on="tableEvents"
@@ -41,6 +52,7 @@
                     v-for="column in normalizedColumns"
                     v-bind="{
                         ...column,
+                        valueType: undefined,
                         formItem: undefined,
                         key: undefined,
                         renderCellHeader: undefined,
@@ -49,33 +61,52 @@
                     }"
                     :key="column.prop || column.key"
                 >
-                    <template #default="scope">
-                        <!-- pro-form-item -->
+                    <template v-if="column.renderCellHeader" #header="scope">
+                        <!-- 覆写头部 -->
                         <!-- start -->
-                        <ProFormItem
-                            :indexProp="`dataSource.${scope.$index}.${column.prop}`"
-                            :item="column.formItem" 
-                            :form="scope.row"
-                        />
+                        <custom-render :render="() => column.renderCellHeader(scope)" />
                         <!-- end -->
-                        <!-- <el-form-item>
-                            <template v-if="column.renderCell" #default="scope">
-                                自定义 render
-                                start
-                                <custom-render :render="() => column.renderCell(scope)" />
-                                end
-                            </template>
-                        </el-form-item> -->
+                    </template>
+                    <template #default="scope">
+                        <template v-if="column.valueType === 'option'">
+                            <!-- 自定义 render -->
+                            <!-- start -->
+                            <render-cell :render="() => column.renderCell(scope)" />
+                            <!-- end -->
+                        </template>
+                        <template v-else>
+                            <!-- pro-form-item -->
+                            <!-- start -->
+                            <ProFormItem
+                                :indexProp="`dataSource.${scope.$index}.${column.prop}`"
+                                :item="column.formItem" 
+                                :form="scope.row"
+                            />
+                            <!-- end -->
+                        </template>
                     </template>
                 </el-table-column>
             </el-table>
-            <el-button class="btn-add" plain icon="el-icon-plus" :size="defaultSize" style="margin: 10px 0">添加一行数据</el-button>
+            <el-button
+                v-if="initializedRecordCreatorProps.position === 'bottom'" 
+                class="btn-add"
+                plain 
+                :size="defaultSize" 
+                icon="el-icon-plus"
+                :style="initializedRecordCreatorProps.style"
+                v-bind="initializedRecordCreatorProps.buttonProps"
+                @click="handleAdd"
+            >
+                {{ initializedRecordCreatorProps.creatorButtonText }}
+            </el-button>
         </div>
     </el-form>
 </template>
 
 <script>
 import ProFormItem from '../ProFormItem'
+import CustomRender from '@/components/CustomRender'
+import RenderCell from './components/RenderCell.vue';
 import {
   setPlaceholder,
   setSelectOptions,
@@ -86,13 +117,20 @@ import { generateCryptoUID } from '@/utils/uid'
 export default {
     name: 'EditableTable',
     components: {
-        ProFormItem
+        ProFormItem,
+        CustomRender,
+        RenderCell
     },
     props: {
         // 是否受控
         controlled: { // todo
             type: Boolean,
             default: false
+        },
+        // 表单默认值
+        initialValues: {
+            type: Object,
+            default: () => {},
         },
         // table 渲染的元数据
         dataSource: {
@@ -167,6 +205,46 @@ export default {
                 'row-key': controlled ? rowKey : 'temp_uid'
             }
         },
+        // 初始化新建
+        initializedRecordCreatorProps() {
+            const { recordCreatorProps } = this
+            // 设置默认值
+            const defaultRecordCreatorProps = {
+                position: 'bottom',
+                newRecordType: 'cache',
+                creatorButtonText: '添加一行数据'
+            }
+            if (recordCreatorProps) {
+                if (typeof recordCreatorProps === 'object') {
+                    return {
+                        ...defaultRecordCreatorProps,
+                        ...recordCreatorProps
+                    }
+                }
+
+                return defaultRecordCreatorProps
+            }
+
+            return {}
+        },
+        // 可编辑表格的相关配置
+        initializedEditable() {
+            const { editable } = this
+            const defaultEditable = {
+                type: 'single',
+                saveText: '保存',
+                deleteText: '删除',
+                cancelText: '取消',
+                deletePopconfirmMessage: '删除此项？',
+                onlyOneLineEditorAlertMessage: '只能同时编辑一行',
+                onlyAddOneLineAlertMessage: '只能新增一行'
+            }
+
+            return {
+                ...defaultEditable,
+                ...editable
+            }
+        },
         // 标准化列配置
         normalizedColumns() {
             const { columns } = this;
@@ -201,6 +279,7 @@ export default {
 
                     return { 
                         ...keys,
+                        valueType,
                         formItem: {
                             ...formItemProps,
                             valueType,
@@ -210,7 +289,7 @@ export default {
                         }
                     };
                 });
-        }
+        },
     },
     data() {
         return {
@@ -265,6 +344,97 @@ export default {
                 }
             }
         },
+        /**
+         * @desc 获取默认的行数据
+         */
+        getDefaultRowData() {
+            const data = this.columns
+                // 筛选表单类型
+                .filter((item) => item.valueType && item.valueType !== 'option')
+                .reduce((accu, cur) => {
+                    const { prop, initialValue } = cur
+
+                    return {
+                        ...accu,
+                        [prop]: initialValue
+                    }
+                }, {})
+
+            return { ...this.initialValues, ...data };
+        },
+        /**
+         * @desc 添加一行数据
+         */
+        handleAdd() {
+            const { initializedRecordCreatorProps: { position, addRowRecord } } = this
+            const defaultRowData = this.getDefaultRowData()
+
+            if (typeof addRowRecord === 'function') {
+                addRowRecord()
+                return
+            }
+
+            const rowData = {
+                ...defaultRowData,
+                temp_uid: generateCryptoUID()
+            }
+            
+            if (position === 'top') {
+                this.form.dataSource.unshift(rowData)
+            } else {
+                this.form.dataSource.push(rowData)
+            }
+        },
+        /**
+         * @desc 获取 el-form 的引用
+         */
+        getFormRef() {
+            return this.$refs.formRef
+        },
+        /**
+         * @desc 获取 el-table 的引用
+         */
+        getTableRef() {
+            return this.$refs.tableRef
+        },
+        /**
+         * @desc 获取行数据
+         */
+        getRowData(rowIndex) {
+            if (typeof rowIndex === 'number') {
+                return this.form.dataSource[rowIndex]
+            } else if (typeof rowIndex === 'string') {
+                const { rowKey } = this
+                return this.form.dataSource.find(item => item[rowKey] === rowIndex)
+            }
+        },
+        /**
+         * @desc 获取整个 table 的数据
+         */
+        getRowsData() {
+            return this.form.dataSource.map(row => {
+                const { temp_uid, ...keys } = row
+                return { ...keys }
+            })
+        },
+        /**
+         * @desc 设置一行的数据
+         */
+        setRowData(rowIndex, data) {
+            const { form: { dataSource } } = this
+            if (typeof rowIndex === 'number') {
+                const rowData = dataSource[rowIndex]
+                dataSource.splice(rowIndex, 1, { ...rowData, ...data })
+            } else if (typeof rowIndex === 'string') {
+                const { rowKey } = this
+                const index = dataSource.findIndex(item => item[rowKey] === rowIndex)
+                if (index === -1) {
+                    return
+                }
+
+                dataSource.splice(index, 1, { ...dataSource[index], ...data })
+            }
+        }
     }
 }
 </script>
@@ -280,6 +450,7 @@ export default {
 
 .editable-table .btn-add {
     width: 100%;
+    margin: 10px 0;
     border-style: dashed;
 }
 </style>
