@@ -1,0 +1,11 @@
+{
+  "name": "element-ui-pro-components-docs",
+  "scripts": {
+    "dev": "vuepress dev",
+    "build": "vuepress build"
+  },
+  "devDependencies": {
+    "iframe-resizer": "^5.5.9",
+    "vuepress": "^1.9.10"
+  }
+}

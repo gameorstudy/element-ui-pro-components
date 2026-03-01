@@ -1,0 +1,38 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install docs dependencies
+        working-directory: ./docs
+        run: npm install
+        
+      - name: Build
+        run: npm run build
+        
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          # 使用新创建的 DEPLOY_TOKEN
+          personal_token: ${{ secrets.DEPLOY_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          # 下面这个选项很重要，确保强制推送
+          force_orphan: true
