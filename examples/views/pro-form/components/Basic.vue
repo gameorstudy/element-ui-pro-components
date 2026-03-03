@@ -311,10 +311,7 @@
             label: '操作',
             valueType: 'option',
             fixed: 'right',
-            renderCell: (scope, action) => [
-              <el-button type="text" onClick={() => this.onDelete(scope.row.id)}>删除</el-button>,
-              <el-button type="text" onClick={() => action.addEditRecord({ ...scope.row, id: Math.random().toString().slice(2, 10) })}>复制</el-button>
-            ]
+            renderCell: () => null
           }
         ]
       },
