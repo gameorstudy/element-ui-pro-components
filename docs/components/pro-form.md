@@ -205,7 +205,7 @@ ProForm 在 el-form 上进行了一层封装，支持了一些预设。
     <td>valueType</td>
     <td>表单元素类型，会生成不同的渲染器。设置 <code>slot</code> 表示自定义，可选</td>
     <td>
-      <a href="./schema.md#valuetype" target="_blank">valueType</a> | <code>slot</code>
+      <a href="/element-ui-pro-components/docs/schema/#valuetype" target="_blank">valueType</a> | <code>slot</code>
     </td>
     <td>-</td>
   </tr>
