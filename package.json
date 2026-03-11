@@ -4,7 +4,7 @@
   },
   "name": "element-ui-pro-components",
   "version": "1.2.6",
-  "description": "Element ui pro components",
+  "description": "Element UI Pro Components - 查询表格与高级表单组件库 for Vue 2，包含 ProTable、ProForm、DialogForm 和 EditableProTable 等高级组件",
   "main": "lib/index.js",
   "files": [
     "lib",
@@ -19,6 +19,7 @@
     "url": "https://github.com/gameorstudy/element-ui-pro-components/issues"
   },
   "keywords": [
+    "element",
     "element-ui",
     "pro-components",
     "vue2",

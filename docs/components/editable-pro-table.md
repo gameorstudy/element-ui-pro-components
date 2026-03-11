@@ -469,7 +469,7 @@ const { save, delete, cancel } = defaultDom
     <td>valueEnum</td>
     <td>选择器枚举，方便自动生成选项</td>
     <td>
-      <a href="./schema.md#valueenum" target="_blank">valueEnum</a>
+      <a href="/element-ui-pro-components/docs/schema/#valueenum" target="_blank">valueEnum</a>
     </td>
     <td>-</td>
   </tr>
