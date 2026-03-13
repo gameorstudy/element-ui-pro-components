@@ -259,7 +259,7 @@
         const { loading } = this
         return {
           cancelText: '自定义取消',
-          submitText: '提交',
+          confirmText: '提交',
           cancelButtonProps: {
             type: 'success',
             plain: true,
@@ -267,7 +267,7 @@
               'border-style': 'dashed'
             }
           },
-          submitButtonProps: {
+          confirmButtonProps: {
             loading
           },
         }

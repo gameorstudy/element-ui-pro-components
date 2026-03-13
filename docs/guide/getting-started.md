@@ -1,6 +1,6 @@
 ### 快速开始
 
-#### element-ui-pro-components
+### Element UI Pro Components
 本项目是受 Ant Design Pro Components 的启发，旨在为 Vue 2 + Element UI 生态提供更高级别的模板组件，方便表单、表格功能开发。
 
 #### 架构与组件总览

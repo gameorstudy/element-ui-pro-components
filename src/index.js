@@ -3,6 +3,7 @@ import ProForm from '../packages/pro-form'
 import DialogForm from '../packages/dialog-form'
 import ProTable from '../packages/pro-table'
 import EditableProTable from '../packages/editable-pro-table'
+import locale from './locale'
 
 // 组件列表
 const components = [
@@ -13,11 +14,14 @@ const components = [
 ]
 
 // ✅ 1. 全局 install 方法 - 支持 Vue.use(ElementUIProComponents)
-const install = function(Vue) {
+const install = function(Vue, opts = {}) {
   // 检查是否已安装
   if (install.installed) {
     return
   }
+
+  locale.use(opts.locale)
+  locale.i18n(opts.i18n)
   
   // 遍历注册所有组件
   components.forEach(component => {
@@ -36,6 +40,8 @@ if (typeof window !== 'undefined' && window.Vue) {
 // ✅ 3. 导出组件和 install 方法
 export default {
   install,
+  locale: locale.use,
+  i18n: locale.i18n,
   ProForm,
   DialogForm,
   ProTable,

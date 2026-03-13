@@ -108,6 +108,7 @@
   import Submitter from './components/Submitter'  
   import { generateCryptoUID } from '@/utils/uid'
   import { setPlaceholder, setSelectOptions, setCascaderOptions } from '@/utils/form'
+  import { t } from '@/locale'
   
   export default {
     name: 'ProForm',
@@ -180,8 +181,8 @@
         if (this.submitter) {
           // 配置按钮文本
           const defaultTextConfig = {
-            resetText: '重置',
-            submitText: '提交'
+            resetText: t('elPro.proForm.reset'),
+            submitText: t('elPro.proForm.submit')
           }
 
           // 对象类型

@@ -478,16 +478,22 @@ Vue.component('ProTable', ProTable)
     <th style="width: 80px">默认值</th>
   </tr>
   <tr>
+    <td>columnSetting</td>
+    <td>列设置文本</td>
+    <td><code>string</code></td>
+    <td><code>列设置</code></td>
+  </tr>
+  <tr>
+    <td>columnDisplay</td>
+    <td>列展示文本</td>
+    <td><code>string</code></td>
+    <td><code>列展示</code></td>
+  </tr>
+  <tr>
     <td>resetText</td>
     <td>重置按钮文本</td>
     <td><code>string</code></td>
     <td><code>重置</code></td>
-  </tr>
-  <tr>
-    <td>settingText</td>
-    <td>列设置按钮文本</td>
-    <td><code>string</code></td>
-    <td><code>列设置</code></td>
   </tr>
   <tr>
     <td>draggable</td>

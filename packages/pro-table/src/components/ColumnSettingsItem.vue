@@ -50,6 +50,7 @@
 <script>
 import HolderIcon from './svg/HolderIcon'
 import ColumnAlignSettings from './ColumnAlignSettings'
+import { t } from '@/locale'
 
 export default {
   name: 'ColumnSettingsItem',
@@ -77,15 +78,15 @@ export default {
       if (Array.isArray(columns) && columns.length) {
         const fixed = columns[0].fixed
         return fixed === "left"
-          ? "固定在左侧"
+          ? t('elPro.tableToolBar.leftFixedTitle')
           : fixed === "right"
-          ? "固定在右侧"
-          : "不固定"
+          ? t('elPro.tableToolBar.rightFixedTitle')
+          : t('elPro.tableToolBar.noFixedTitle')
       }
 
       return ""
     },
-    // columnSettings.draggable && columns.length > 1
+    // 是否支持拖动
     draggable() {
       return this.columnSettings.draggable && this.columns?.length > 1
     },

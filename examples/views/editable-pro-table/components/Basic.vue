@@ -49,7 +49,6 @@
       editable() {
         const { editableKeys } = this
         return {
-          type: 'multiple',
           editableKeys,
           onChange: keys => this.editableKeys = keys,
           onSave: (recordKey, editRow, originRow) => {
@@ -228,9 +227,9 @@
             valueType: 'option',
             fixed: 'right',
             renderCell: (scope, action) => [
-              <el-button type="text" onClick={() => action.startEditable(scope.row.id)}>编辑</el-button>,
-              <el-button type="text" onClick={ () => this.dataSource = this.dataSource.filter(item => item.id !== scope.row.id) }>删除</el-button>,
-              <el-button type="text" onClick={() => action.addEditRecord({ id: Math.random().toString().slice(2, 10), name1: scope.row.name1 })}>复制</el-button>,
+              <el-button type="text" size="small" onClick={() => action.startEditable(scope.row.id)}>编辑</el-button>,
+              <el-button type="text" size="small" onClick={() => this.dataSource = this.dataSource.filter(item => item.id !== scope.row.id) }>删除</el-button>,
+              <el-button type="text" size="small" onClick={() => action.addEditRecord({ id: Math.random().toString().slice(2, 10), name1: scope.row.name1 })}>复制</el-button>,
             ]
           }
         ]
@@ -241,7 +240,6 @@
         dataSource: undefined,
         recordCreatorProps: {
           position: 'top',
-          newRecordType: 'dataSource',
           record: () => ({
             // 建议写全，表单重置必须绑定属性
             id: Math.random().toString().slice(2, 10),
@@ -255,7 +253,7 @@
             date: undefined,
             status: undefined
           }),
-          createButtonText: '新增一行',
+          creatorButtonText: '新增一行',
           style: {
             background: '#d9d9d9'
           },

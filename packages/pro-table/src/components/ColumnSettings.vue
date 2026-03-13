@@ -5,7 +5,7 @@
     trigger="click"
   >
     <div class="pro-table__toolbar-item" slot="reference">
-      <el-tooltip :content="columnSettings.settingText" placement="top">
+      <el-tooltip :content="columnSettings.columnSetting" placement="top">
         <SettingIcon />
       </el-tooltip>
     </div>
@@ -16,10 +16,10 @@
         :indeterminate="isIndeterminate"
         @change="handleChange"
       >
-        {{ columnSettings.settingText }}
+        {{ columnSettings.columnDisplay }}
       </el-checkbox>
-      <span v-else>{{ columnSettings.settingText }}</span>
-      <el-button type="text" @click="handleReset">{{ columnSettings.resetText }}</el-button>
+      <span v-else>{{ columnSettings.columnDisplay }}</span>
+      <a type="text" class="btn-reset" @click="handleReset">{{ columnSettings.resetText }}</a>
     </div>
     <div class="column-settings-popover-content">
       <!-- 固定在列首 -->
@@ -140,6 +140,20 @@ export default {
   align-items: center;
   justify-content: space-between;
   height: 32px;
+}
+
+.column-settings-popover-header /deep/ .el-checkbox__label {
+  padding-inline-start: 8px;
+}
+
+.btn-reset {
+  color: #409EFF;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn-reset:hover {
+  color: #66b1ff;
 }
 
 .column-settings-popover-content {

@@ -1,35 +1,4 @@
-<!-- README.md 顶部添加 -->
-<p align="center">
-  <a href="https://gameorstudy.github.io/element-ui-pro-components/" target="_blank">
-    <img width="180" src="https://gameorstudy.github.io/element-ui-pro-components/docs/favicon.ico" alt="logo">
-  </a>
-</p>
-
-<h1 align="center">Element UI Pro Components</h1>
-
-<p align="center">
-  <a href="https://www.npmjs.com/package/element-ui-pro-components">
-    <img src="https://img.shields.io/npm/v/element-ui-pro-components.svg" alt="npm version">
-  </a>
-  <a href="https://www.npmjs.com/package/element-ui-pro-components">
-    <img src="https://img.shields.io/npm/dm/element-ui-pro-components.svg" alt="npm downloads">
-  </a>
-  <a href="https://github.com/gameorstudy/element-ui-pro-components/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/gameorstudy/element-ui-pro-components.svg" alt="license">
-  </a>
-</p>
-
-<p align="center">
-  基于 Element UI 的高级组件库 | ProTable · ProForm · EditableProTable · DialogForm
-</p>
-
-<p align="center">
-  <a href="https://gameorstudy.github.io/element-ui-pro-components/docs/" target="_blank">📚 文档</a> · 
-  <a href="https://github.com/gameorstudy/element-ui-pro-components" target="_blank">🐞 GitHub</a> · 
-  <a href="https://www.npmjs.com/package/element-ui-pro-components" target="_blank">📦 NPM</a>
-</p>
-
-#### element-ui-pro-components
+### Element UI Pro Components
 本项目是受 Ant Design Pro Components 的启发，旨在为 Vue 2 + Element UI 生态提供更高级别的模板组件，方便表单、表格功能开发。
 
 #### 架构与组件总览

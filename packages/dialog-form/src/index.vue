@@ -105,7 +105,7 @@
       <template v-else>
         <span class="dialog-form-footer">
           <el-button v-bind="submitterProps.cancelButtonProps" @click="close" >{{ submitterProps.cancelText }}</el-button>
-          <el-button type="primary" v-bind="submitterProps.submitButtonProps" @click="submit">{{ submitterProps.submitText }}</el-button>
+          <el-button type="primary" v-bind="submitterProps.confirmButtonProps" @click="submit">{{ submitterProps.confirmText }}</el-button>
         </span>
       </template>
       <!-- end -->
@@ -120,6 +120,7 @@
   import Submitter from './components/Submitter'
   import { generateCryptoUID } from '@/utils/uid'
   import { setPlaceholder, setSelectOptions, setCascaderOptions } from '@/utils/form'
+  import { t } from '@/locale'
 
   export default {
     name: 'DialogForm',
@@ -254,8 +255,8 @@
         if (this.submitter) {
           // 配置按钮文本
           const defaultTextConfig = {
-            cancelText: '取消', 
-            submitText: '确定'
+            cancelText: t('elPro.dialogForm.cancel'), 
+            confirmText: t('elPro.dialogForm.confirm')
           }
 
           // 对象类型

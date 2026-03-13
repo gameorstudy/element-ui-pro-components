@@ -17,15 +17,15 @@
     },
     render: function(h) {
       const { 
-        submitter: { cancelText, submitText, cancelButtonProps, submitButtonProps },
+        submitter: { cancelText, confirmText, cancelButtonProps, confirmButtonProps },
         action: { close, submit }
       } = this
       // 非原生属性需要放到 props 里，测试是 vue 解析 jsx 的原因
       const cancelProps = { props: cancelButtonProps, cancelButtonProps }
-      const submitProps = { props: submitButtonProps, submitButtonProps }
+      const confirmProps = { props: confirmButtonProps, confirmButtonProps }
       const doms = [
         <el-button { ...cancelProps } onClick={close} key='close'>{ cancelText }</el-button>,
-        <el-button type="primary" { ...submitProps } onClick={submit} key='submit'>{ submitText }</el-button>
+        <el-button type="primary" { ...confirmProps } onClick={submit} key='submit'>{ confirmText }</el-button>
       ]
 
       return <Fragment>

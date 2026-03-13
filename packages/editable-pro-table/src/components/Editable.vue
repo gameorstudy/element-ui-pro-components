@@ -49,7 +49,6 @@
     data() {
       return {
         saveLoading: false, // 加载中...
-        visible: false,
         deleteLoading: false, // 加载中
       }
     },
@@ -88,7 +87,6 @@
           if (res === false) {
             return
           }
-          this.visible = false
           await this.action.cancelEditable(recordKey, row)
           this.$emit('delete', recordKey)
         } catch (err) {
@@ -114,17 +112,14 @@
       const { defaultSize } = this
       const doms = {
         save: <el-button class="btn-save" type="text" size={defaultSize} loading={this.saveLoading} onClick={this.save}>{ saveText }</el-button>,
-        delete: <el-popover placement="top" popper-class="delete-popover-message" trigger="click" value={this.visible} onInput={ val => this.visible = val }>
-          <p>
-            <i class="el-icon-warning" style="color: #ffad00; margin-right: 8px" />
-            <span>{ deletePopconfirmMessage }</span>
-          </p>
-          <div style="text-align: right; margin-left: 22px">
-            <el-button size="mini" type="text" onClick={() => { this.visible = false }}>取消</el-button>
-            <el-button type="primary" size="mini" onClick={this.delete}>确定</el-button>
-          </div>
+        delete: <el-popconfirm
+          icon="el-icon-info"
+          popper-class="delete-popover-message"
+          title={deletePopconfirmMessage}
+          onConfirm={this.delete}
+        >
           <el-button slot="reference" type="text" size={defaultSize} loading={this.deleteLoading}>{ deleteText }</el-button>
-        </el-popover>,
+        </el-popconfirm>,
         cancel: <el-button class="btn-cancel" type="text" size={defaultSize} onClick={this.cancel}>{ cancelText }</el-button>,
       }
 
@@ -182,5 +177,9 @@ span + :deep(.btn-cancel) {
 
 .delete-popover-message.el-popover p {
   margin: 0 0 10px;
+}
+
+.delete-popover-message.el-popover .el-popconfirm__action {
+  margin-inline-start: 8px;
 }
 </style>

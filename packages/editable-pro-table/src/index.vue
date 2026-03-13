@@ -89,6 +89,7 @@
   import CustomRender from '@packages/custom-render'
   import RenderCell from './components/RenderCell'
   import Editable from './components/Editable'
+  import { t } from '@/locale'
 
   export default {
     name: 'EditableProTable',
@@ -191,8 +192,8 @@
           const defaultRecordCreatorProps = {
             position: 'bottom',
             newRecordType: 'cache',
-            creatorButtonText: '添加一行数据',
-            onlyAddOneLineAlertMessage: '只能新增一行'
+            creatorButtonText: t('elPro.editableProTable.add'),
+            onlyAddOneLineAlertMessage: t('elPro.editableProTable.onlyAddOneLine')
           }
           if (typeof recordCreatorProps === 'object') {
             return {
@@ -219,11 +220,11 @@
       initializedEditable() {
         const defaultEditable = {
           type: 'single',
-          saveText: '保存',
-          deleteText: '删除',
-          cancelText: '取消',
-          deletePopconfirmMessage: '删除此项？',
-          onlyOneLineEditorAlertMessage: '只能同时编辑一行',
+          saveText: t('elPro.editableProTable.save'),
+          deleteText: t('elPro.editableProTable.delete'),
+          cancelText: t('elPro.editableProTable.cancel'),
+          deletePopconfirmMessage: t('elPro.editableProTable.deleteThisLine'),
+          onlyOneLineEditorAlertMessage: t('elPro.editableProTable.onlyOneLineEditor'),
         }
 
         return {
@@ -703,10 +704,6 @@
 
 .editable-pro-table /deep/ th.el-table__cell {
   overflow: unset;
-}
-
-.editable-pro-table /deep/ td.el-table__cell {
-  padding: 20px 0;
 }
 
 .editable-pro-table /deep/ .cell {

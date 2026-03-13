@@ -210,8 +210,9 @@
         loading: false,
         total: 0,
         columnSettings: {
+          columnSetting: '列设置文本',
+          columnDisplay: '列展示文本',
           resetText: '重置按钮',
-          settingText: '列设置文本',
         }
       }
     },

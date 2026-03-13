@@ -1,6 +1,7 @@
 const { execSync } = require('child_process')
 const fs = require('fs-extra')
 const path = require('path')
+const babel = require('@babel/core')
 
 const components = [
   'index',
@@ -108,6 +109,72 @@ if (fs.existsSync('lib/index')) {
   fs.removeSync('lib/index')
 }
 
+// 语言包构建
+console.log('\n🌐 Building locale files...');
+
+const localeSrcPath = path.resolve(process.cwd(), 'src/locale/lang');
+const localeDestPath = path.resolve(process.cwd(), 'lib/umd/locale');  // 输出到 umd 目录
+const localeCommonPath = path.resolve(process.cwd(), 'lib/locale/lang'); // 也输出到 commonjs 目录
+
+// 创建目录
+fs.ensureDirSync(localeDestPath);
+fs.ensureDirSync(localeCommonPath);
+
+// 读取所有语言文件
+const localeFiles = fs.readdirSync(localeSrcPath)
+  .filter(file => file.endsWith('.js'));
+
+localeFiles.forEach(file => {
+  const name = path.basename(file, '.js');
+  const srcFile = path.join(localeSrcPath, file);
+  
+  console.log(`  📝 Processing ${file}...`);
+  
+  // 读取源码
+  const code = fs.readFileSync(srcFile, 'utf-8');
+  
+  // 1. 生成 CommonJS 版本（用于 Node.js / Webpack）
+  const cjsResult = babel.transformSync(code, {
+    presets: [['@babel/preset-env', { modules: 'commonjs' }]],
+    filename: file
+  });
+  
+  fs.writeFileSync(
+    path.join(localeCommonPath, file),
+    cjsResult.code
+  )
+  
+  // 2. 生成 UMD 版本（用于浏览器）
+  const umdResult = babel.transformSync(code, {
+    plugins: [
+      'add-module-exports',
+      ['@babel/plugin-transform-modules-umd', { 
+        exactGlobals: true,
+        globals: {
+          index: `ELEMENT_PRO.lang.${name}`
+        }
+      }]
+    ],
+    moduleId: `element-pro/locale/${name}`,
+    filename: file
+  })
+  
+  // 添加全局变量
+  let umdCode = umdResult.code
+  umdCode = umdCode.replace(
+    'global.',
+    `global.ELEMENT_PRO = global.ELEMENT_PRO || {};\n  global.ELEMENT_PRO.lang = `
+  )
+  
+  fs.writeFileSync(
+    path.join(localeDestPath, file),
+    umdCode
+  );
+  
+  console.log(`    ✅ Generated: lib/umd/locale/${file}`)
+  console.log(`    ✅ Generated: lib/locale/lang/${file}`)
+});
+
 // 显示最终目录结构
 console.log('\n📁 Final directory structure:')
 console.log('lib/')
@@ -131,3 +198,4 @@ function printDir(dir, prefix = '') {
 printDir('lib')
 
 console.log('\n✅ 构建完成！')
+

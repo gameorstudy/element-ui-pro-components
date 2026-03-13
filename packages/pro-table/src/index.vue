@@ -46,7 +46,7 @@
             >
             <template v-if="showExpandToggle">
               <el-button class="btn-collapse" type="text" :size="defaultSize" @click="handleCollapse">
-                {{ collapsed ? "展开" : "收起" }}
+                {{ collapsed ? t('elPro.proTable.expand') : t('elPro.proTable.collapse') }}
                 <ArrowIcon
                   style="transition: 0.3s"
                   :style="{ transform: `rotate(${collapsed ? 0 : 0.5}turn)` }"
@@ -133,6 +133,7 @@
   import ArrowIcon from "./components/svg/ArrowIcon"
   import CustomRender from '@packages/custom-render'
   import ColumnSettings from './components/ColumnSettings'
+  import { t } from '@/locale'
 
   export default {
     name: 'ProTable',
@@ -230,8 +231,8 @@
         const { search } = this
         if (search) {
           const defaultSearch = {
-            searchText: "查询",
-            resetText: "重置",
+            searchText: t('elPro.proTable.search'),
+            resetText: t('elPro.proTable.reset'),
             labelWidth: "80px",
             rowProps: {
               gutter: 8,
@@ -403,8 +404,9 @@
         const { columnSettings } = this
         if (columnSettings) {
           const defaultColumnSettings = {
-            resetText: '重置',
-            settingText: '列设置',
+            columnSetting: t('elPro.tableToolBar.columnSetting'),
+            columnDisplay: t('elPro.tableToolBar.columnDisplay'),
+            resetText: t('elPro.tableToolBar.reset'),
             draggable: true,
             checkable: true
           }
@@ -504,6 +506,12 @@
       }
     },
     methods: {
+      /**
+       * @desc 多语言支持
+       */
+      t(key) {
+        return t(key)
+      },
       /**
        * @desc 获取异步下拉数据
        */
@@ -807,7 +815,7 @@
           columnSettingsRule.splice(toIndex, 0, { ...fromColumn, index: toIndex })
         } else {
           // 先插入 后删除
-          columnSettingsRule.splice(toIndex, 0 , { ...fromColumn, index: toIndex })
+          columnSettingsRule.splice(endIndex, 0 , { ...fromColumn, index: endIndex - 1 })
           columnSettingsRule.splice(fromIndex, 1)
         }
       },
@@ -866,7 +874,6 @@
 
 <style scoped>
 .pro-table__form {
-  padding: 24px 24px 2px;
   margin-block-end: 16px;
   background-color: #fff;
 }

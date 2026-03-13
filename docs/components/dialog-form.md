@@ -114,7 +114,7 @@ submitter 设置 `false` 会隐藏默认的提交按钮。
     <td>取消</td>
   </tr>
   <tr>
-    <td>submitText</td>
+    <td>confirmText</td>
     <td>确定按钮的文本</td>
     <td><code>string</code></td>
     <td>确定</td>
@@ -126,7 +126,7 @@ submitter 设置 `false` 会隐藏默认的提交按钮。
     <td>-</td>
   </tr>
   <tr>
-    <td>submitButtonProps</td>
+    <td>confirmButtonProps</td>
     <td>el-button 的 attributes & button 的原生属性</td>
     <td><a href="https://element.eleme.io/2.15/#/zh-CN/component/button#attributes" target="_blank">ButtonProps</a></td>
     <td>-</td>

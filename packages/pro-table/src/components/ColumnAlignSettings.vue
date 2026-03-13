@@ -1,17 +1,17 @@
 <template>
   <span class="icon-algin-group">
     <template v-if="column.fixed !== 'left'">
-      <el-tooltip content="固定在列首" placement="top">
+      <el-tooltip :content="t('elPro.tableToolBar.leftPin')" placement="top">
         <VerticalAlignTopIcon @click.native.stop.prevent="handleAlgin('left')" />
       </el-tooltip>
     </template>
     <template v-if="column.fixed === 'left' || column.fixed === 'right'">
-      <el-tooltip content="不固定" placement="top">
+      <el-tooltip :content="t('elPro.tableToolBar.noPin')" placement="top">
         <VerticalAlginMiddleIcon @click.native.stop.prevent="handleAlgin()" />
       </el-tooltip>
     </template>
     <template v-if="column.fixed !== 'right'">
-      <el-tooltip content="固定在列尾" placement="top">
+      <el-tooltip :content="t('elPro.tableToolBar.rightPin')" placement="top">
         <VerticalAlginBottomIcon @click.native.stop.prevent="handleAlgin('right')" />
       </el-tooltip>
     </template>
@@ -22,6 +22,7 @@
 import VerticalAlignTopIcon from "./svg/VerticalAlignTopIcon"
 import VerticalAlginBottomIcon from "./svg/VerticalAlginBottomIcon"
 import VerticalAlginMiddleIcon from "./svg/VerticalAlginMiddleIcon"
+import { t } from '@/locale'
 
 export default {
   name: "ColumnAlginSettings",
@@ -39,6 +40,13 @@ export default {
     },
   },
   methods: {
+    /**
+     * @desc 支持国际化
+     * @param key 
+     */
+    t(key) {
+      return t(key)
+    },
     /**
      * @desc 监听修改
      * @param {string | undefined} fixed 固定位置

@@ -29,9 +29,4 @@ module.exports = defineConfig({
       'vue-fragment',
     ] : []
   },
-  devServer: {
-    historyApiFallback: {
-      index: '/index.html'  // 这里已经处理了本地 404
-    }
-  }
 })
