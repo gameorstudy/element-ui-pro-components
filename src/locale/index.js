@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import defaultLang from './lang/zh-CN'
+import defaultLang from 'element-ui-pro-components/lib/locale/lang/zh-CN'
 
 let lang = defaultLang
 let i18nHandler = function() {

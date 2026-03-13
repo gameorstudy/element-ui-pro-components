@@ -175,6 +175,40 @@ localeFiles.forEach(file => {
   console.log(`    ✅ Generated: lib/locale/lang/${file}`)
 });
 
+console.log('\n🔧 Building locale/index.js...');
+
+const srcPath = path.resolve(process.cwd(), 'src/locale/index.js');
+const destPath = path.resolve(process.cwd(), 'lib/locale/index.js');
+
+// 确保目标目录存在
+fs.ensureDirSync(path.dirname(destPath));
+
+// 读取源码
+const code = fs.readFileSync(srcPath, 'utf-8');
+console.log(`  📝 Processing index.js...`);
+
+// 最简配置：只转换语法，不引入任何 runtime
+const cjsResult = babel.transformSync(code, {
+  // 完全忽略项目中的 babel.config.js
+  configFile: false,
+  
+  // 只用最简单的配置
+  presets: [
+    ['@babel/preset-env', { 
+      modules: 'commonjs'
+    }]
+  ],
+  // 不添加任何插件
+  plugins: [],
+  
+  filename: 'index.js'
+});
+
+fs.writeFileSync(destPath, cjsResult.code);
+console.log(`    ✅ Generated: lib/locale/index.js`);
+
+console.log('\n✨ locale/index.js build completed!');
+
 // 显示最终目录结构
 console.log('\n📁 Final directory structure:')
 console.log('lib/')

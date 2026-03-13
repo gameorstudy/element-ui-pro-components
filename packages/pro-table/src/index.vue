@@ -133,7 +133,7 @@
   import ArrowIcon from "./components/svg/ArrowIcon"
   import CustomRender from '@packages/custom-render'
   import ColumnSettings from './components/ColumnSettings'
-  import { t } from '@/locale'
+  import { t } from 'element-ui-pro-components/lib/locale'
 
   export default {
     name: 'ProTable',

@@ -120,7 +120,7 @@
   import Submitter from './components/Submitter'
   import { generateCryptoUID } from '@/utils/uid'
   import { setPlaceholder, setSelectOptions, setCascaderOptions } from '@/utils/form'
-  import { t } from '@/locale'
+  import { t } from 'element-ui-pro-components/lib/locale'
 
   export default {
     name: 'DialogForm',

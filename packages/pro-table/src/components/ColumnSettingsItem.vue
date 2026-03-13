@@ -50,7 +50,7 @@
 <script>
 import HolderIcon from './svg/HolderIcon'
 import ColumnAlignSettings from './ColumnAlignSettings'
-import { t } from '@/locale'
+import { t } from 'element-ui-pro-components/lib/locale'
 
 export default {
   name: 'ColumnSettingsItem',

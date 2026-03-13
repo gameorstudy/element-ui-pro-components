@@ -22,7 +22,7 @@
 import VerticalAlignTopIcon from "./svg/VerticalAlignTopIcon"
 import VerticalAlginBottomIcon from "./svg/VerticalAlginBottomIcon"
 import VerticalAlginMiddleIcon from "./svg/VerticalAlginMiddleIcon"
-import { t } from '@/locale'
+import { t } from 'element-ui-pro-components/lib/locale'
 
 export default {
   name: "ColumnAlginSettings",

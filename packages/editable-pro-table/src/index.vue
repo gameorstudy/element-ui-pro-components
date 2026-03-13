@@ -89,7 +89,7 @@
   import CustomRender from '@packages/custom-render'
   import RenderCell from './components/RenderCell'
   import Editable from './components/Editable'
-  import { t } from '@/locale'
+  import { t } from 'element-ui-pro-components/lib/locale'
 
   export default {
     name: 'EditableProTable',
