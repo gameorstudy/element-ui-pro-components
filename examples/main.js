@@ -9,7 +9,7 @@ import enUS from '@/locale/lang/en-US'
 // 引入 iframe-resizer 内容脚本
 import 'iframe-resizer/js/iframeResizer.contentWindow.js'
 
-// locale.use(enUS)
+locale.use(enUS)
 
 Vue.config.productionTip = false
 

@@ -18,8 +18,6 @@ module.exports = defineConfig({
       alias: {
         '@packages': path.resolve(__dirname, 'packages'),
         '@examples': path.resolve(__dirname, 'examples'),
-        // 把 'element-ui-pro-components' 指向本地源码
-        'element-ui-pro-components/lib': path.resolve(__dirname, 'src'),
         'element-ui-pro-components': path.resolve(__dirname, 'src/index.js'),
       },
     },

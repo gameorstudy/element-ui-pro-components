@@ -1,3 +1,5 @@
+import { t } from 'element-ui-pro-components/lib/locale'
+
 /**
  * @desc 获取表单元素默认的 placeholder
  * @param {String} valueType 表单元素类型
@@ -6,12 +8,12 @@ function getDefaultPlaceholder(valueType) {
   switch (valueType) {
     case 'input':
     case 'input-number':
-      return '请输入'
+      return t('elPro.placeholder.input')
     case 'select':
     case 'time-picker':
     case 'date-picker':
     case 'cascader':
-      return '请选择'
+      return t('elPro.placeholder.select')
     default:
       return ''
   }

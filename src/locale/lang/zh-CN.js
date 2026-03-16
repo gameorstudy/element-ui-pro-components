@@ -1,5 +1,9 @@
 export default {
   elPro: {
+    placeholder: {
+      input: '请输入',
+      select: '请选择'
+    },
     proForm: {
       reset: '重置',
       submit: '提交'

@@ -3,7 +3,7 @@ import ProForm from '../packages/pro-form'
 import DialogForm from '../packages/dialog-form'
 import ProTable from '../packages/pro-table'
 import EditableProTable from '../packages/editable-pro-table'
-import locale from './locale'
+import locale from 'element-ui-pro-components/lib/locale'
 
 // 组件列表
 const components = [

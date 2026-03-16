@@ -389,7 +389,7 @@ const defaultColConfig = {
   </tr>
   <tr>
     <td>key</td>
-    <td>在列设置中，若未指定 <code>prop</code> 字段，则默认使用 <code>key</code> 作为唯一标识符</td>
+    <td>vue 需要的 key，如果已经设置了唯一的 <code>prop</code>，可以忽略这个属性
     <td><code>string</code></td>
     <td>-</td>
   </tr>
@@ -397,9 +397,9 @@ const defaultColConfig = {
 
 > 如果表格和表单的 <code>prop</code> 是同一个，则只需要配置表格的 <code>prop</code> 字段。同理 <code>label</code> 字段。
 
-> `renderField` 自定义渲染因为没有 `v-model`，是值的传递，所以需要进行初始化。如果 `column` 或 `el-form-item` 配置了 `prop` 且是绑定字段，则默认进行了初始化。反之则需要在 initialValue 或 initialValues 进行配置。
+> `renderField` 自定义渲染因为没有 `v-model`，是值的传递，所以需要进行初始化。如果 `column` 或 `el-form-item` 配置了 `prop` 且是绑定字段，则默认进行了初始化。反之则需要在 `initialValue` 或 `initialValues` 进行配置。
 
-> 配置 `valueEnum` 在表格中会自动回显 `label` 值。
+> 配置 `valueEnum` 在表格中会自动回显 `label` 值，注意 `Map` 类型取值需要匹配类型。
 
 ##### valueType slot
 <table style="display: table">
@@ -515,19 +515,19 @@ Vue.component('ProTable', ProTable)
 举个例子：
 ```js
 [
-  { label: '标题1', prop: title1, index: 0 }, // 不固定
-  { label: '标题2', prop: title2: index: 1, fixed: 'right' }, // 固定在右侧
-  { label: '标题3', prop: title3, index: 2, fixed: 'left }, // 固定在左侧
-  { label: '标题4', prop: title4: index: 3 } // 不固定
+  { label: '标题1', prop: 'title1', index: 0 }, // 不固定
+  { label: '标题2', prop: 'title2': index: 1, fixed: 'right' }, // 固定在右侧
+  { label: '标题3', prop: 'title3', index: 2, fixed: 'left' }, // 固定在左侧
+  { label: '标题4', prop: 'title4': index: 3 } // 不固定
 ]
 ```
-当拖拽 `prop = title4` 到 `prop = "title` 上方的位置时，此时的列设置规则对应如下 
+当拖拽 `prop = title4` 到 `prop = title1` 上方的位置时，此时的列设置规则对应如下 
 ```js
 [
-  { label: '标题4', prop: title4, index: 0 }, // 不固定
-  { label: '标题1', prop: title1: index: 1 } // 不固定
-  { label: '标题2', prop: title2: index: 2, fixed: 'right' }, // 固定在右侧
-  { label: '标题3', prop: title3, index: 3, fixed: 'left }, // 固定在左侧
+  { label: '标题4', prop: 'title4', index: 0 }, // 不固定
+  { label: '标题1', prop: 'title1': index: 1 } // 不固定
+  { label: '标题2', prop: 'title2': index: 2, fixed: 'right' }, // 固定在右侧
+  { label: '标题3', prop: 'title3', index: 3, fixed: 'left' }, // 固定在左侧
 ]
 ```
 可以看到固定列的 `index` 也发生了变化。

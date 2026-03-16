@@ -1,5 +1,9 @@
 export default {
   elPro: {
+    placeholder: {
+      input: 'Please input',
+      select: 'Please select'
+    },
     proForm: {
       reset: 'Reset',
       submit: 'Submit'
