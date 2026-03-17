@@ -296,9 +296,15 @@ ProForm 在 el-form 上进行了一层封装，支持了一些预设。
     </td>
     <td>-</td>
   </tr>
+  <tr>
+    <td>key</td>
+    <td>vue 需要的 key，如果已经设置了唯一的 <code>prop</code>，可以忽略这个属性
+    <td><code>string</code></td>
+    <td>-</td>
+  </tr>
 </table>
 
-> `renderField` 和 `renderFormItem` 自定义渲染因为没有 `v-model`，是值的传递，所以需要进行初始化。如果 `formItemConfig` 配置了 `prop` 且是绑定字段，则默认进行了初始化。反之则需要设置 initialValue 值或在 initialValues 添加属性默认值。
+> `renderField` 和 `renderFormItem` 自定义渲染是值的传递（jsx 支持 v-model 语法，个人不大推荐）。如果 `formItemConfig.prop` 存在，则默认进行了初始化；反之则需要在 initialValues 添加默认值。
 
 > options 参数的格式为选择器[选项](https://element.eleme.io/2.15/#/zh-CN/component/select#ji-chu-yong-fa)，同时，兼容了选择器的分组，可以传递分组的[选项](https://element.eleme.io/2.15/#/zh-CN/component/select#fen-zu)，判断依据是列表中第一条数据包含了 options 数组。
 

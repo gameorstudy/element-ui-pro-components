@@ -18,7 +18,7 @@
             v-for="(formItem, index) in formItems"
             v-bind="searchProps.colProps"
             :style="{ display: index >= searchCount ? 'none' : '' }"
-            :key="formItem.prop ?? getUID()"
+            :key="formItem.prop || formItem.key"
           >
             <!-- ProFormItem -->
             <!-- start -->
@@ -87,7 +87,7 @@
           ...column,
           nonElColumnProps: undefined,
         }"
-        :key="column.prop || column.nonElColumnProps.key"
+        :key="column.prop || column.nonElColumnProps.key || `${column.type}-col`"
       >
         <template v-if="column.nonElColumnProps.renderCellHeader" #header="scope">
           <!-- 覆写头部 -->
@@ -128,7 +128,6 @@
   import { setPlaceholder, setSelectOptions, setCascaderOptions } from '@/utils/form'
   import { defaultColConfig, BREAKPOINT_ORDER, GRID_COLUMNS, calculateCurrentSpan } from "@/utils/breakpoints"
   import { debounce } from "@/utils/debounce"
-  import { generateCryptoUID } from '@/utils/uid'
   import ProFormItem from '@packages/pro-form-item'
   import ArrowIcon from "./components/svg/ArrowIcon"
   import CustomRender from '@packages/custom-render'
@@ -727,12 +726,6 @@
           })
       },
       /**
-       * @desc 获取 uid
-       */
-      getUID() {
-        return generateCryptoUID()
-      },
-      /**
        * @desc 全选、取消全选
        * @param {Boolean} checked 勾选状态
        */
@@ -832,7 +825,7 @@
        * @desc el-table 重新渲染
        */
       updateTableKey() {
-        this.tableKey = this.getUID()
+        this.tableKey = Math.random().toString().slice(2, 8)
         this.$nextTick(() => {
           this.$emit('onKeyChange')
         })

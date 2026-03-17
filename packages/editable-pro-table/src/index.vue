@@ -24,7 +24,7 @@
       <el-table-column
         v-for="(column, index) in initializedColumns"
         v-bind="getColumnProps(column, index)"
-        :key="column.prop || column.key"
+        :key="column.prop || column.key || `${column.type}-col`"
       >
         <template v-if="column.renderCellHeader" #header="scope">
           <!-- 覆写头部 -->
@@ -320,6 +320,23 @@
         }
       },
       /**
+       * @desc 初始化表单字段
+       */
+      getInitialValues() {
+        return this.initializedColumns
+        .reduce((accu, cur) => {
+          const { prop } = cur
+          if (!prop) {
+            return accu
+          }
+
+          return {
+            ...accu,
+            [prop]: undefined
+          }
+        }, {})
+      },
+      /**
        * 新增一行的方法
        * @param record 数据
        * @param newLine 新增一行的配置
@@ -347,7 +364,10 @@
         }
         const index = newLineConfig.position === 'top' ? dataSource.length : 0
         record = record ?? defaultRecord
-        const newRecord = typeof record === 'function' ? record(index, dataSource) : record
+        const newRecord = { 
+          ...this.getInitialValues(),
+          ...(typeof record === 'function' ? record(index, dataSource) : record) 
+        }
         if (!newRecord[rowKey]) {
           console.error('Error: 请设置 recordCreatorProps.record 并返回一个唯一的key')
           return
@@ -577,7 +597,11 @@
             // 重置为新增的初始值
             const { initializedCreatorProps: { record }, form, name, rowKey } = this
             const dataSource = form[name]
-            const newRecord = typeof record === 'function' ? record(index, dataSource) : record
+            const newRecord = { 
+              ...this.getInitialValues(),
+              ...(typeof record === 'function' ? record(index, dataSource) : record) 
+            }
+            // 防止 rowKey 覆盖
             delete newRecord[rowKey]
             this.setRowData(index, newRecord)
           }

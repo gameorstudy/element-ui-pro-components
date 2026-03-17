@@ -13,7 +13,7 @@
         <el-col 
           v-for="formItem in normalizedFormItems" 
           v-bind="formItem.colProps"
-          :key="formItem.prop ?? getUID()"
+          :key="formItem.prop || formItem.key"
         >
           <!-- 自定义 el-form-item -->
           <!-- start -->
@@ -65,7 +65,7 @@
           v-else
           :form="form" 
           :formItem="formItem"
-          :key="formItem.prop ?? getUID()"
+          :key="formItem.prop || formItem.key"
         >
           <template #[formItem.prop]>
             <slot :name="formItem.prop" v-bind="{ form, formItem }"></slot>
@@ -106,7 +106,6 @@
   import CustomRender from '@packages/custom-render'
   import ProFormItem from '@packages/pro-form-item'
   import Submitter from './components/Submitter'  
-  import { generateCryptoUID } from '@/utils/uid'
   import { setPlaceholder, setSelectOptions, setCascaderOptions } from '@/utils/form'
   import { t } from 'element-ui-pro-components/lib/locale'
   
@@ -315,12 +314,6 @@
         this.$refs.proFormRef?.clearValidate()
         // 重置数据
         this.form = this.initForm()
-      },
-      /**
-       * @desc 获取 uid
-       */
-      getUID() {
-        return generateCryptoUID()
       }
     }
   }

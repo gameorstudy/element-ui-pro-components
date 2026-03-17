@@ -230,7 +230,8 @@
               <el-button type="text" size="small" onClick={() => action.startEditable(scope.row.id)}>编辑</el-button>,
               <el-button type="text" size="small" onClick={() => this.dataSource = this.dataSource.filter(item => item.id !== scope.row.id) }>删除</el-button>,
               <el-button type="text" size="small" onClick={() => action.addEditRecord({ id: Math.random().toString().slice(2, 10), name1: scope.row.name1 })}>复制</el-button>,
-            ]
+            ],
+            key: 'action'
           }
         ]
       }
@@ -240,18 +241,12 @@
         dataSource: undefined,
         recordCreatorProps: {
           position: 'top',
+          newRecordType: 'dataSource',
           record: () => ({
             // 建议写全，表单重置必须绑定属性
             id: Math.random().toString().slice(2, 10),
             name1: 'hello',
-            name2: undefined,
-            name3: undefined,
-            name3_1: undefined,
-            name4: undefined,
-            type1: undefined,
-            type2: undefined,
-            date: undefined,
-            status: undefined
+            name3_1: undefined
           }),
           creatorButtonText: '新增一行',
           style: {

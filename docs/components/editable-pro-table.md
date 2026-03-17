@@ -513,21 +513,21 @@ const { save, delete, cancel } = defaultDom
   </tr>
   <tr>
     <td>key</td>
-    <td>组件的 <code>key</code>，可选</td>
+    <td>vue 需要的 key，如果是 <code>type: index|selection|expand</code> 或已经设置了唯一的 <code>prop</code>，可以忽略这个属性
     <td><code>string</code></td>
     <td>-</td>
   </tr>
 </table>
 
-> 表单元素绑定的是 `column` 的 `prop`，`formItemProps` 的 `label` 属性不支持，推荐写 `rules` 等校验配置,。
+> 表单元素绑定的是 `column` 的 `prop`，`formItemProps` 的 `label` 属性不支持，推荐写 `rules` 等校验配置。
 
 > 操作栏需要配置 `valueType: 'option'`。
 
-> `renderField` 自定义渲染因为没有 `v-model`，是值的传递，因此需要在 `RecordCreatorProps.config` 里进行初始化。
+> `renderField` 自定义渲染是值的传递。如果 `prop` 存在，则进行了默认的初始化；反之则需要在 `RecordCreatorProps.config` 里进行初始化。
 
 > `fieldEvents` 封装了一层，添加了一个额外的 `options` 对象实参，包含了 `recordKey`、`row` 和 `index` 等 `key`。
 
-> 选择器配置 `valueEnum` 或 `options` 在表格中会自动回显 `label` 值。
+> 选择器在表格中会自动回显 `label` 值。注意：`valueEnum` 是 `Map` 类型时需要精确匹配。
 
 ```ts
 interface ActionConfig {

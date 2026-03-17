@@ -106,7 +106,6 @@
           },
           {
             label: '活动名称4',
-            prop: 'name4',
             renderField: ({ form, formItem }) => 
               <el-input 
                 value={ form.name4 } 
@@ -114,15 +113,15 @@
                 attrs={ formItem.fieldProps }
                 on={ formItem.fieldEvents }
                 onClear={this.handleClear}
-              />
-            ,
+              />,
             fieldProps: {
               placeholder: 'renderField 实现的',
               clearable: true,
             },
             fieldEvents: {
               change: this.handleChange
-            }
+            },
+            key: 'name4',
           },
           {
             label: '活动区域1',
@@ -227,7 +226,6 @@
           },
           {
             label: 'I\'m hide',
-            prop: 'hide',
             valueType: 'input',
             hideInForm: true
           },
@@ -358,6 +356,7 @@
           },
         ],
         initialValues: {
+          name4: undefined,
           date3: new Date(2026, 0, 1),
           date4: Date.now(),
           date5: '',

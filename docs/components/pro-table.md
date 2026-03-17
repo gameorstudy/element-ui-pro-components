@@ -397,7 +397,7 @@ const defaultColConfig = {
   </tr>
   <tr>
     <td>key</td>
-    <td>vue 需要的 key，如果已经设置了唯一的 <code>prop</code>，可以忽略这个属性
+    <td>vue 需要的 key，如果是 <code>type: index|selection|expand</code> 或已经设置了唯一的 <code>prop</code>，可以忽略这个属性
     <td><code>string</code></td>
     <td>-</td>
   </tr>
