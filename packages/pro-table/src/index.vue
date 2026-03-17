@@ -376,7 +376,7 @@
 
         // 支持显示/隐藏列
         if (checkable) {
-          normalizedColumns = normalizedColumns.filter(item => item.nonElColumnProps.checkable)
+          normalizedColumns = normalizedColumns.filter(item => item.nonElColumnProps.checkable || !!item.type)
         } 
 
         return normalizedColumns
@@ -717,7 +717,7 @@
           // 过滤隐藏的 && (columnConfig.prop || columnConfig.key)
           .filter((item) => !item.hideInTable && (item.prop || item.key))
           .map((col, index) => {
-            const { prop, key, fixed } = col;
+            const { prop, key, fixed } = col
             return {
               prop: prop || key,
               fixed,
@@ -829,6 +829,15 @@
         })
       },
       /**
+       * @desc el-table 重新渲染
+       */
+      updateTableKey() {
+        this.tableKey = this.getUID()
+        this.$nextTick(() => {
+          this.$emit('onKeyChange')
+        })
+      },
+      /**
        * @desc 监听列设置修改
        * @param { Object } data 数据
        * @param {String} data.event 事件类型
@@ -851,12 +860,12 @@
           case "reset":
             this.handleResetRule()
             // 更新 table key
-            this.tableKey = this.getUID()
+            this.updateTableKey()
             break
           case 'drop':
             this.handleDropRule(fromProp, toProp, isAfter)
             // 更新 table key
-            this.tableKey = this.getUID()
+            this.updateTableKey()
             break
           default:
             break

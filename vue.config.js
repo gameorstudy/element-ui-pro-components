@@ -11,13 +11,13 @@ module.exports = defineConfig({
     }
   } : undefined,
   transpileDependencies: true,
-  // 设置公共路径为相对路径，解决字体文件引用问题
   configureWebpack: {
     // 配置别名
     resolve: {
       alias: {
         '@packages': path.resolve(__dirname, 'packages'),
         '@examples': path.resolve(__dirname, 'examples'),
+        'element-ui-pro-components/lib': path.resolve(__dirname, 'src'),
         'element-ui-pro-components': path.resolve(__dirname, 'src/index.js'),
       },
     },

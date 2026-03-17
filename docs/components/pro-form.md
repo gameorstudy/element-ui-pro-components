@@ -298,7 +298,7 @@ ProForm 在 el-form 上进行了一层封装，支持了一些预设。
   </tr>
 </table>
 
-> `renderField` 和 `renderFormItem` 自定义渲染因为没有 `v-model`，是值的传递，所以需要进行初始化。如果 `formItemConfig` 配置了 `prop` 且是绑定字段，则默认进行了初始化。反之则需要在 initialValue 或 initialValues 进行配置。
+> `renderField` 和 `renderFormItem` 自定义渲染因为没有 `v-model`，是值的传递，所以需要进行初始化。如果 `formItemConfig` 配置了 `prop` 且是绑定字段，则默认进行了初始化。反之则需要设置 initialValue 值或在 initialValues 添加属性默认值。
 
 > options 参数的格式为选择器[选项](https://element.eleme.io/2.15/#/zh-CN/component/select#ji-chu-yong-fa)，同时，兼容了选择器的分组，可以传递分组的[选项](https://element.eleme.io/2.15/#/zh-CN/component/select#fen-zu)，判断依据是列表中第一条数据包含了 options 数组。
 

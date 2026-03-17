@@ -8,7 +8,8 @@
       :loading="loading"
       :total="total"
       :tableProps="{
-        border: true
+        border: true,
+        'row-key': 'id'
       }"
       :tableEvents="{
         'selection-change': this.selectChange
@@ -31,6 +32,7 @@
       @onSubmit="onSubmit"
       @onReset="onReset"
       @onCollapse="onCollapse"
+      @onKeyChange="onKeyChange"
     >
       <!-- 活动名称3 -->
       <!-- start -->
@@ -73,8 +75,7 @@
           {
             width: 60,
             type: 'selection',
-            key: 'selection',
-            disabled: true
+            'reserve-selection': true,
           },
           { 
             label: '活动名称1',
@@ -219,7 +220,8 @@
     methods: {
       onParams(params) {
         console.log('params', params)
-        const data = Array.from({ length: TOTAL_RECORDS }, () => ({
+        const data = Array.from({ length: TOTAL_RECORDS }, (_, index) => ({
+          id: index,
           name1: `名称1 ${Math.random().toString().slice(2, 6)}`,
           name2: `名称2 ${Math.random().toString().slice(2, 6)}`,
           name3: `名称3 ${Math.random().toString().slice(2, 6)}`,
@@ -247,8 +249,15 @@
         this.collapsed = collapsed
         console.log(`我${collapsed ? '收起了' : '展开了'}`)
       },
+      onKeyChange() {
+        const tableRef = this.$refs.proTableRef.getTableRef()
+        this.rowSelections.forEach(item => {
+          tableRef.toggleRowSelection(item, true)
+        })
+      },
       selectChange(rows) {
         console.log('rows', rows)
+        this.rowSelections = rows
       },
       reload() {
         this.$refs.proTableRef.reload()
