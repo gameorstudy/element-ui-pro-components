@@ -1,0 +1,6 @@
+{
+  "pro-form": "./packages/pro-form/index.js",
+  "dialog-form": "./packages/dialog-form/index.js",
+  "pro-table": "./packages/pro-table/index.js",
+  "editable-pro-table": "./packages/editable-pro-table/index.js"
+}
