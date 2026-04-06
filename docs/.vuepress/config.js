@@ -1,3 +1,5 @@
+const path = require("node:path")
+const fs = require("node:fs")
 module.exports = {
   base: '/element-ui-pro-components/',
   title: 'Element UI Pro Components',
@@ -5,6 +7,7 @@ module.exports = {
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }]
   ],
+  plugins: ['demo-container'],
   themeConfig: {
     repo: 'https://github.com/gameorstudy/element-ui-pro-components',
     nav: [
@@ -44,5 +47,23 @@ module.exports = {
   },
   markdown: {
     lineNumbers: true
+  },
+  configureWebpack: {
+    module: {
+      rules: [
+        {
+          test: /\.jsx?$/,
+          include: process.cwd(),
+          exclude: /node_modules\/(?!(element-ui)\/).*/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@vue/babel-preset-jsx'],
+              cacheDirectory: false
+            }
+          }
+        },
+      ]
+    }
   }
 }
