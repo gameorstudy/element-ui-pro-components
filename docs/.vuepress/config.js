@@ -1,5 +1,3 @@
-const path = require("node:path")
-const fs = require("node:fs")
 module.exports = {
   base: '/element-ui-pro-components/',
   title: 'Element UI Pro Components',
