@@ -1,6 +1,6 @@
 {
   "name": "element-ui-pro-components",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "homepage": "https://gameorstudy.github.io/element-ui-pro-components/",
   "description": "Vue 2 + Element UI Pro Components: ProForm, DialogForm, ProTable, EditableProTable.",
   "main": "lib/element-ui-pro-components.common.js",

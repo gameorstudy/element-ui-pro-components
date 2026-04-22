@@ -24,8 +24,8 @@
         render
       } = this
       // { ...props } 传递组件属性时 需要 props 包裹 
-      const cancelProps = { props: cancelButtonProps, cancelButtonProps }
-      const confirmProps = { props: confirmButtonProps, confirmButtonProps }
+      const cancelProps = { props: cancelButtonProps, ...cancelButtonProps }
+      const confirmProps = { props: confirmButtonProps, ...confirmButtonProps }
       const doms = [
         <el-button { ...cancelProps } onClick={close} key='close'>{ cancelText }</el-button>,
         <el-button type="primary" { ...confirmProps } onClick={submit} key='submit'>{ confirmText }</el-button>

@@ -274,7 +274,8 @@ export default {
         },
       ],
       initialValues: {
-        name1: 'hello world'
+        name1: 'world',
+        name2: 'hello world'
       },
       editableKeys: [],
       recordCreatorProps: {

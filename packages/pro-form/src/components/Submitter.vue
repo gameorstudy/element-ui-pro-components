@@ -24,8 +24,8 @@
         render
       } = this
       // { ...props } 传递组件属性时 需要 props 包裹 
-      const resetProps = { props: resetButtonProps, resetButtonProps }
-      const submitProps = { props: submitButtonProps, submitButtonProps }
+      const resetProps = { props: resetButtonProps, ...resetButtonProps }
+      const submitProps = { props: submitButtonProps, ...submitButtonProps }
       const doms = [
         <el-button { ...resetProps } onClick={reset} key='reset'>{ resetText }</el-button>,
         <el-button type="primary" { ...submitProps } onClick={submit} key='submit'>{ submitText }</el-button>
