@@ -1,6 +1,8 @@
 const path = require('path');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const config = require('./config');
 
@@ -28,7 +30,9 @@ module.exports = {
     'vue-fragment',
   ],
   optimization: {
-    minimize: false
+    minimizer: [
+      new OptimizeCSSAssetsPlugin({})
+    ]
   },
   performance: {
     hints: false
@@ -56,7 +60,11 @@ module.exports = {
       },      
       {
         test: /\.(less|css)$/,
-        use: 'null-loader'
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'less-loader'
+        ]
       },
       {
         test: /\.(svg|otf|ttf|woff2?|eot|gif|png|jpe?g)(\?\S*)?$/,
@@ -68,7 +76,10 @@ module.exports = {
       }
     ]
   },
-  plugins: [
+  plugins: [    
+    new MiniCssExtractPlugin({
+      filename: 'index.css',
+    }),
     new ProgressBarPlugin(),
     new VueLoaderPlugin()
   ]

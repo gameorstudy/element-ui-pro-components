@@ -1,6 +1,6 @@
 {
   "name": "element-ui-pro-components",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "homepage": "https://gameorstudy.github.io/element-ui-pro-components/",
   "description": "Vue 2 + Element UI Pro Components: ProForm, DialogForm, ProTable, EditableProTable.",
   "main": "lib/element-ui-pro-components.common.js",
@@ -54,7 +54,7 @@
     "css-loader": "^2.1.0",
     "el-table-prepend": "^1.3.2",
     "element-ui": "^2.15.14",
-    "element-ui-pro-components": "^1.5.0",
+    "element-ui-pro-components": "^1.5.3",
     "html-webpack-plugin": "^4.5.2",
     "less": "^4.6.4",
     "less-loader": "^7.3.0",

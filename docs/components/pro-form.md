@@ -13,6 +13,7 @@ valueType 的用法
       }"
       :formItems="formItems"
       :submitter="submitter"
+      :initialValues="initialValues"
       @onFinish="onFinish"
     >
       <template #name2="{ form }">
@@ -45,7 +46,8 @@ export default {
           fieldProps: {
             placeholder: 'valueType'
           },         
-            rules: [{ required: true, message: '请输入', trigger: 'blur' }]
+            rules: [{ required: true, message: '请输入', trigger: 'blur' }],
+            initialValue: 'hello'
         },
         {
           label: '活动名称2',
@@ -273,6 +275,10 @@ export default {
           ]
         },
       ],
+      initialValues: {
+        name1: 'world',
+        name2: 'hello world'
+      },
       editableKeys: [],
       recordCreatorProps: {
         newRecordType: 'dataSource',
