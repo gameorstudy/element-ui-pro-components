@@ -544,7 +544,7 @@
             
             return {
               ...accu,
-              [key]: initialValue,
+              [key]: initialValue ?? this.initialValues[key],
             }
           }, {})
 

@@ -228,7 +228,7 @@
 
           return {
             ...accu,
-            [prop]: initialValue
+            [prop]: initialValue ?? initialValues[prop]
           }
         }, {})
 

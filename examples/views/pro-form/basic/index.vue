@@ -6,6 +6,7 @@
       }"
       :formItems="formItems"
       :submitter="submitter"
+      :initialValues="initialValues"
       @onFinish="onFinish"
     >
       <template #name2="{ form }">
@@ -43,13 +44,14 @@ export default {
           fieldProps: {
             placeholder: 'valueType'
           },         
-            rules: [{ required: true, message: '请输入', trigger: 'blur' }]
+          rules: [{ required: true, message: '请输入', trigger: 'blur' }],
+          initialValue: 'hello'
         },
         {
           label: '活动名称2',
           prop: 'name2', 
           valueType: 'slot',       
-            rules: [{ required: true, message: '请输入', trigger: 'blur' }]
+          rules: [{ required: true, message: '请输入', trigger: 'blur' }]
         },
         {
           label: '活动名称3',
@@ -57,7 +59,7 @@ export default {
           renderField: ({ form }) => (
             <el-input value={form.name3} onInput={val => form.name3 = val} placeholder="renderField" />
           ),         
-            rules: [{ required: true, message: '请输入', trigger: 'blur' }]
+          rules: [{ required: true, message: '请输入', trigger: 'blur' }]
         },
         {
           label: '活动区域1',
@@ -76,7 +78,7 @@ export default {
               value: 'region2'
             }
           ],         
-            rules: [{ required: true, message: '请选择', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择', trigger: 'change' }]
         },
         {
           label: '活动区域2',
@@ -89,7 +91,7 @@ export default {
             'region1': '区域一',
             'region2': '区域二'
           },       
-            rules: [{ required: true, message: '请选择', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择', trigger: 'change' }]
         },
         {
           label: '活动区域3',
@@ -102,7 +104,7 @@ export default {
             ['region1', '区域一'],
             ['region2', '区域二']
           ]),       
-            rules: [{ required: true, message: '请选择', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择', trigger: 'change' }]
         },
         {
           label: '活动区域4',
@@ -125,7 +127,7 @@ export default {
               ])
             }, 100)
           }),       
-            rules: [{ required: true, message: '请选择', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择', trigger: 'change' }]
         },
         {
           label: '活动类型1',
@@ -135,7 +137,7 @@ export default {
             placeholder: 'fieldProps.options',
             options: this.cascaderOptions,
           },       
-            rules: [{ required: true, message: '请选择', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择', trigger: 'change' }]
         },
         {
           label: '活动类型2',
@@ -149,7 +151,7 @@ export default {
               resolve(this.cascaderOptions)
             }, 500)
           }),       
-            rules: [{ required: true, message: '请选择', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择', trigger: 'change' }]
         },
         {
           label: '活动时间',
@@ -158,7 +160,7 @@ export default {
           fieldProps: {
             'value-format': 'yyyy-MM-dd'
           },       
-            rules: [{ required: true, message: '请选择', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择', trigger: 'change' }]
         },
         {
           label: '活动性质',
@@ -171,7 +173,7 @@ export default {
             { label: '单纯品牌曝光', value: '单纯品牌曝光' },
           ],
           initialValue: [],       
-            rules: [{ required: true, message: '请选择', trigger: 'change' }]
+          rules: [{ required: true, message: '请选择', trigger: 'change' }]
         },
         {
           label: '特殊资源',
@@ -271,6 +273,9 @@ export default {
           ]
         },
       ],
+      initialValues: {
+        name1: 'hello world'
+      },
       editableKeys: [],
       recordCreatorProps: {
         newRecordType: 'dataSource',

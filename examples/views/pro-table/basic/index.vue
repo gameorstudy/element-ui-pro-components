@@ -4,6 +4,7 @@
     :dataSource="dataSource"
     :total="total"
     :loading="loading"
+    :initialValues="initialValues"
     @onParams="onParams"
   />  
 </template>
@@ -25,7 +26,8 @@ export default {
           'min-width': 120,
           label: '姓名',
           prop: 'name',
-          valueType: 'input' 
+          valueType: 'input',
+          initialValue: 'hello world'
         },
         {
           'min-width': 180,
@@ -68,7 +70,10 @@ export default {
     return {
       dataSource: undefined,
       total: 0,
-      loading: false
+      loading: false,
+      initialValues: {
+        name: 'hello'
+      }
     }
   },
   methods: {

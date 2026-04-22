@@ -7,6 +7,7 @@
       }"
       v-model="visible"
       :formItems="formItems"
+      :initialValues="initialValues"
       @onFinish="onFinish"
     >
       <template #name2="{ form }">
@@ -33,7 +34,8 @@ export default {
           valueType: 'input',
           fieldProps: {
             placeholder: 'valueType'
-          }
+          },
+          initialValue: 'hello world'
         },
         {
           label: '活动名称2',
@@ -188,6 +190,9 @@ export default {
           ]
         },
       ],
+      initialValues: {
+        name1: 'hello'
+      }
     }
   },
   methods: {
