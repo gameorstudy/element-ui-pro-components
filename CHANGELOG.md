@@ -1,4 +1,9 @@
 ### Changelog
+#### 1.5.4 (2026-04-25)
+
+- chore
+ProTable 添加 setFieldValue 和 setFieldsValue 方法，用于修改表单
+
 #### 1.5.3 (2026-04-22)
 
 - bug fix

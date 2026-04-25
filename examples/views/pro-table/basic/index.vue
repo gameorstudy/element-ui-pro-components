@@ -1,12 +1,18 @@
 <template>
   <ProTable 
+    ref="proTableRef"
     :columns="columns"  
     :dataSource="dataSource"
     :total="total"
     :loading="loading"
     :initialValues="initialValues"
     @onParams="onParams"
-  />  
+  >
+    <div>
+      <el-button @click="setFieldValue">setFieldValue</el-button>
+      <el-button @click="setFieldsValue">setFieldsValue</el-button>
+    </div>
+  </ProTable>  
 </template>
 
 <script>
@@ -77,6 +83,14 @@ export default {
     }
   },
   methods: {
+    setFieldValue() {
+      this.$refs.proTableRef.setFieldValue('name', 'Li Hua')
+    },
+    setFieldsValue() {
+      this.$refs.proTableRef.setFieldsValue({
+        province: 'shanghai'
+      })
+    },
     onParams(params) {
       console.log('params', params)
 

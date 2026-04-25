@@ -666,6 +666,24 @@
         this.$emit("onSubmit", params)
       },
       /**
+       * @desc 手动更新表单数据
+       * @param {Object} data 数据
+       */
+      setFieldsValue(data) {
+        this.form = {
+          ...this.form,
+          ...data
+        }
+      },
+      /**
+       * @desc 手动更新单个字段数据
+       * @param {String} key 键
+       * @param {any} value 值
+       */
+      setFieldValue(key, value) {
+        this.form[key] = value
+      },
+      /**
        * @desc 刷新
        * @param {boolean} resetPageIndex 是否重置页码
        */
