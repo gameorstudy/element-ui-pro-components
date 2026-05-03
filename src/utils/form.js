@@ -8,7 +8,7 @@
  * @param {Object} cachedOptions 下拉数据
  */
 export function setSelectOptions(item, cachedOptions) {
-  const { valueType, prop, options, valueEnum, optionLoader } = item
+  const { valueType, formItemProps = {}, prop, options, valueEnum, optionLoader } = item
   if (valueType !== 'select') {
     return
   }
@@ -31,8 +31,9 @@ export function setSelectOptions(item, cachedOptions) {
   }
   
   // 设置 options：优先使用缓存
-  item.options = optionLoader && cachedOptions[prop]
-    ? cachedOptions[prop]
+  const key = formItemProps.prop || prop
+  item.options = optionLoader && cachedOptions[key]
+    ? cachedOptions[key]
     : []
 }
 
@@ -46,7 +47,7 @@ export function setSelectOptions(item, cachedOptions) {
  * @param {Object} cachedOptions 下拉数据
  */
 export function setCascaderOptions(fieldProps, item, cachedOptions) {
-  const { valueType, prop, optionLoader } = item
+  const { valueType, formItemProps = {}, prop, optionLoader } = item
   if (valueType !== 'cascader') {
     return
   }
@@ -57,7 +58,8 @@ export function setCascaderOptions(fieldProps, item, cachedOptions) {
   }
   
   // 设置 options：优先使用缓存
-  if (optionLoader && cachedOptions[prop]) {
-    fieldProps.options = cachedOptions[prop]
+  const key = formItemProps.prop || prop
+  if (optionLoader && cachedOptions[key]) {
+    fieldProps.options = cachedOptions[key]
   }
 }

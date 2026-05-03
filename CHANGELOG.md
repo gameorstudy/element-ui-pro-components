@@ -1,4 +1,8 @@
 ### Changelog
+#### 1.5.5 (2026-05-03)
+- bug fix
+修复 ProTable 表单 formItemProps 中 prop 设置不生效的问题
+
 #### 1.5.4 (2026-04-25)
 
 - chore

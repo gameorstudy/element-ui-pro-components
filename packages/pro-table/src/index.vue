@@ -510,10 +510,10 @@
       getOptions() {
         const { columns } = this
         for (const column of columns) {
-          const { prop, fieldProps = {}, optionLoader } = column
+          const { prop, formItemProps = {}, optionLoader } = column
           if (optionLoader && typeof optionLoader === "function") {
             optionLoader().then((res) => {
-              const key = fieldProps.prop || prop
+              const key = formItemProps.prop || prop
               this.cachedOptions = {
                 ...this.cachedOptions,
                 [key]: res,
@@ -536,8 +536,8 @@
           // 筛选表单类型
           .filter((item) => !!item.valueType)
           .reduce((accu, cur) => {
-            const { prop, fieldProps = {}, initialValue } = cur
-            const key = fieldProps.prop || prop
+            const { prop, formItemProps = {}, initialValue } = cur
+            const key = formItemProps.prop || prop
             if (!key) {
               return accu
             }
