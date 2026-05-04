@@ -582,7 +582,7 @@ const { save, delete, cancel } = defaultDom
   <tr>
     <td>renderCellHeader</td>
     <td>自定义表格标题</td>
-    <td><code>() => jsx</code></td>
+    <td><code>({ column, $index }) => jsx</code></td>
     <td>-</td>
   </tr>
   <tr>
