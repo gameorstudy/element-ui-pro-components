@@ -383,7 +383,7 @@ export default {
         background: rgba(42, 46, 54, 0.04);
       }
 
-      .icon-algin-group {
+      .icon-align-group {
         display: inline-flex;
       }
     }

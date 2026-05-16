@@ -1,18 +1,18 @@
 <template>
-  <span class="icon-algin-group">
+  <span class="icon-align-group">
     <template v-if="column.fixed !== 'left'">
       <el-tooltip :content="t('elProComponents.tableToolBar.leftPin')" placement="top">
-        <VerticalAlignTopIcon @click.native.stop.prevent="handleAlgin('left')" />
+        <VerticalAlignTopIcon @click.native.stop.prevent="handleAlign('left')" />
       </el-tooltip>
     </template>
     <template v-if="column.fixed === 'left' || column.fixed === 'right'">
       <el-tooltip :content="t('elProComponents.tableToolBar.noPin')" placement="top">
-        <VerticalAlginMiddleIcon @click.native.stop.prevent="handleAlgin()" />
+        <VerticalAlignMiddleIcon @click.native.stop.prevent="handleAlign()" />
       </el-tooltip>
     </template>
     <template v-if="column.fixed !== 'right'">
       <el-tooltip :content="t('elProComponents.tableToolBar.rightPin')" placement="top">
-        <VerticalAlginBottomIcon @click.native.stop.prevent="handleAlgin('right')" />
+        <VerticalAlignBottomIcon @click.native.stop.prevent="handleAlign('right')" />
       </el-tooltip>
     </template>
   </span>
@@ -20,17 +20,17 @@
 
 <script>
 import VerticalAlignTopIcon from "./svg/VerticalAlignTopIcon"
-import VerticalAlginBottomIcon from "./svg/VerticalAlginBottomIcon"
-import VerticalAlginMiddleIcon from "./svg/VerticalAlginMiddleIcon"
+import VerticalAlignBottomIcon from "./svg/VerticalAlignBottomIcon"
+import VerticalAlignMiddleIcon from "./svg/VerticalAlignMiddleIcon"
 import { t } from 'element-ui-pro-components/src/locale'
 
 export default {
-  name: "ColumnAlginSettings",
+  name: "ColumnAlignSettings",
   inject: ["onColumnSettingsChange"],
   components: {
     VerticalAlignTopIcon,
-    VerticalAlginMiddleIcon,
-    VerticalAlginBottomIcon,
+    VerticalAlignMiddleIcon,
+    VerticalAlignBottomIcon,
   },
   props: {
     // 单个列表项
@@ -51,7 +51,7 @@ export default {
      * @desc 监听修改
      * @param {string | undefined} fixed 固定位置
      */
-    handleAlgin(fixed) {
+    handleAlign(fixed) {
       const { prop } = this.column
       // ProTable provide 提供
       this.onColumnSettingsChange({ event: "align", prop, fixed })
@@ -61,7 +61,7 @@ export default {
 </script>
 
 <style scoped>
-.icon-algin-group {
+.icon-align-group {
   margin-left: auto;
   align-items: center;
   gap: 8px;
@@ -71,7 +71,7 @@ export default {
   transition: display 0.2s;
 }
 
-.icon-algin-group svg {
+.icon-align-group svg {
   outline: none;
 }
 </style>
