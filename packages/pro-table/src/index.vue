@@ -356,20 +356,20 @@
 
             return col
           })
-        }
-        
-        // 列设置处理
-        const { draggable, checkable } = initializedColumnSettings
 
-        // 支持拖拽排序
-        if (draggable) {
-          normalizedColumns.sort((a, b) => a.nonElColumnProps.index - b.nonElColumnProps.index)
+          // 列设置处理
+          const { draggable, checkable } = initializedColumnSettings
+  
+          // 支持拖拽排序
+          if (draggable) {
+            normalizedColumns.sort((a, b) => a.nonElColumnProps.index - b.nonElColumnProps.index)
+          }
+  
+          // 支持显示/隐藏列
+          if (checkable) {
+            normalizedColumns = normalizedColumns.filter(item => item.nonElColumnProps.checkable || !!item.type)
+          } 
         }
-
-        // 支持显示/隐藏列
-        if (checkable) {
-          normalizedColumns = normalizedColumns.filter(item => item.nonElColumnProps.checkable || !!item.type)
-        } 
 
         return normalizedColumns
       },
