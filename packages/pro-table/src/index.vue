@@ -802,11 +802,11 @@
        */
       handleDropRule(fromProp, toProp, isAfter = false) {
         const { columnSettingsRule } = this
-        const fromIndex = columnSettingsRule.findIndex(item => (item.prop || item.key) === fromProp)
+        const fromIndex = columnSettingsRule.findIndex(item => item.prop === fromProp)
         if (fromIndex === -1) {
           return
         }
-        const toIndex = columnSettingsRule.findIndex(item => (item.prop || item.key) === toProp)
+        const toIndex = columnSettingsRule.findIndex(item => item.prop === toProp)
         if (toIndex === -1) {
           return
         }
