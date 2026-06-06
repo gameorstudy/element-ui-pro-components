@@ -471,14 +471,16 @@ setRowData?: (rowIndex: string | number, data: Partial<T>) => void;
 </table>
 
 ```ts
-interface LineConfig {
+interface AddLineOptions = {
+  position?: 'top' | 'bottom';
+  recordKey?: RecordKey;
+  newRecordType?: 'dataSource' | 'cache';
+};
+
+interface NewLineConfig<T> = {
   defaultValue?: T;
-  options: {
-    position?: 'top' | 'bottom';
-    recordKey?: RecordKey;
-    newRecordType?: 'dataSource' | 'cache';
-  }
-}
+  options: AddLineOptions;
+};
 
 interface ActionRenderConfig {
   editableKeys?: RowEditableConfig<T>['editableKeys'];
@@ -490,7 +492,7 @@ interface ActionRenderConfig {
   onDelete?: RowEditableConfig<T>['onDelete'];
   onCancel: RowEditableConfig<T>['onCancel'];
   cancelEditable: (key: RecordKey) => void;
-  newLineConfig?: LineConfig;
+  newLineConfig?: NewLineConfig;
   saveText?: React.ReactNode;
   deleteText?: React.ReactNode;
   cancelText?: React.ReactNode;
