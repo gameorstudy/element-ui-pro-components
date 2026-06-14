@@ -408,7 +408,6 @@
         // 筛选 el-column 属性
         const {
           formItemProps,
-          renderLabel,
           valueType,
           renderField,
           fieldProps,
